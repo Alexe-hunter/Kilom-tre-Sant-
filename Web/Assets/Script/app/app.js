@@ -2,9 +2,9 @@
 
 //dico d'objets pour mes routes
 const routes = {
-    "home": "/",
-    "pharma": "/pharmacie",
-    "about": "/about"
+    "/": "/Web/pages/home.html",
+    "/pharmacie": "/Web/pages/pharma.html",
+    "/about": "/Web/pages/about.html"
 };
 
 //fonction pour charger une page en fonction de la route
@@ -17,7 +17,8 @@ async function loadPage(route) {
 
 //écoute du changement de hash dans le link ou url 
 window.addEventListener("hashchange", () => {
-    loadPage(window.location.hash.substring(1));
+    const hash = window.location.hash.substring(1);
+    loadPage(hash || "/");
 });
 
 //chargement de la page d'accueil
