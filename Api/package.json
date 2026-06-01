@@ -1,18 +1,17 @@
 {
-  "name": "api",
+  "name": "kilometre-sante-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "API backend pour Kilomètre-Santé — pharmacies de garde Pointe-Noire",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
-    "cors": "^2.8.6",
-    "express": "^5.2.1"
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
   }
 }
