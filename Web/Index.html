@@ -1,26 +1,163 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="Assets/Style/main.css">
-    <link rel="stylesheet" href="components/style/nav.css">
-    <link rel="stylesheet" href="components/Style/footer.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-    <title>Kilomètre_Santé</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="Assets/img/assest-logo/logo-color-green.png" type="image/x-icon">
+  <title>Kilomètre-Santé</title>
+
+  <link rel="stylesheet" href="Assets/Styles/variables.css">
+  <link rel="stylesheet" href="Assets/Styles/reset.css">
+  <link rel="stylesheet" href="Assets/Styles/style.css">
+  <!-- link font aweson pour mes icones-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!--map css-->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 
 <body>
 
-    <div id="nav"></div>
 
-    <main id="app"></main>
+  <!--HEADER-->
+  <header class="header" role="banner">
+    <div class="header__inner">
 
-    <div id="footer"></div>
+      <div class="header__logo">
+        <img src="Assets/img/assest-logo/logo-color-white.png" alt="Logo de Kilomètre-Santé">
+        <h1 class="header__title">
+          Kilomètre<span>-Santé</span>
+        </h1>
+      </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="Assets/Script/utils/components.js"></script>
-    <script src="Assets/Script/app/app.js"></script>
+      <!--competeur-->
+      <div class="header__badge" id="header-badge" aria-live="polite">
+        <span class="badge__dot"></span>
+        Chargement...
+      </div>
+
+    </div>
+  </header>
+
+    <!--hero-->
+  <section class="hero-video">
+    <video class="hero-video__video" autoplay muted loop playsinline>
+      <source src="Videos/hero-video1.mp4" type="video/mp4">
+    </video>
+    <div class="hero-video__overlay"></div>
+    <div class="hero-video__content">
+      <h1 class="hero-video__title">Kilomètre<span>-Santé</span></h1>
+      <p class="hero-video__subtitle">Trouvez les pharmacies de garde à Pointe-Noire</p>
+    </div>
+  </section>
+
+
+
+  <!--barre de recherche-->
+  <nav class="search-section" role="search" aria-label="Recherche">
+
+    <div class="search-tabs">
+      <button class="search-tab active" data-tab="pharmacie" type="button">
+        <i class="fas fa-hospital" aria-hidden="true"></i> Pharmacie
+      </button>
+      <button class="search-tab" data-tab="medicament" type="button">
+        <i class="fas fa-pills" aria-hidden="true"></i> Médicament
+      </button>
+    </div>
+
+    <div class="search-wrapper">
+      <i class="fas fa-search search-icon" aria-hidden="true"></i>
+      <input type="search" id="search-input" class="search-input" placeholder="Rechercher par nom ou quartier..."
+        autocomplete="off" spellcheck="false" aria-label="Recherche">
+      <button class="search-clear" id="search-clear" type="button" aria-label="Effacer">
+        <i class="fas fa-times" aria-hidden="true"></i>
+      </button>
+    </div>
+
+  </nav>
+
+
+  <!--Filtres-->
+  <div class="filters-section" id="filters-container" role="group" aria-label="Filtres">
+
+    <button class="filter-btn active" data-filter="tous" type="button">
+      <i class="fas fa-list" aria-hidden="true"></i> Tous
+    </button>
+
+    <button class="filter-btn" data-filter="garde" type="button">
+      <i class="fas fa-heartbeat" aria-hidden="true"></i> De Garde
+    </button>
+
+    <button class="filter-btn" id="btn-localisation" type="button">
+      <i class="fas fa-location-arrow" aria-hidden="true"></i> Me localiser
+    </button>
+
+  </div>
+
+
+  <!--map leaflet-->
+  <div id="map" role="region" aria-label="Carte des pharmacies"></div>
+
+  <!--MAIN-->
+  <main class="results-section" id="main" role="main">
+
+    <div class="results-header">
+      <p class="results-count" id="results-count" aria-live="polite">
+        Chargement...
+      </p>
+    </div>
+
+    <div class="cards-grid" id="cards-grid" role="list" aria-label="Liste des pharmacies">
+      <!--map generée par renderPharmacies() dans render.js -->
+    </div>
+
+    <div class="empty-state" id="empty-state" role="alert" aria-live="assertive">
+      <div class="empty-state__icon">
+        <i class="fas fa-search-minus" aria-hidden="true"></i>
+      </div>
+      <h2 class="empty-state__title">Aucun résultat</h2>
+      <p class="empty-state__text">Essayez un autre terme ou modifiez les filtres.</p>
+    </div>
+
+  </main>
+
+
+  <!-- ══ PANNEAU DE DÉTAIL (slide-in) ═════════════════════ -->
+
+  <div class="detail-overlay" id="detail-overlay" aria-hidden="true"></div>
+
+  <aside class="detail-panel" id="detail-panel" role="dialog" aria-labelledby="detail-name" aria-modal="true">
+
+    <div class="detail-handle" aria-hidden="true"></div>
+
+    <div class="detail-header">
+      <div class="detail-header__top">
+        <h2 class="detail-name" id="detail-name">Chargement...</h2>
+        <button class="btn-close-detail" id="btn-close-detail" aria-label="Fermer le détail">
+          <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="detail-infos" id="detail-infos"></div>
+
+      <div class="detail-actions" id="detail-actions"></div>
+    </div>
+
+    <div class="catalogue-section" id="catalogue-section">
+    </div>
+
+  </aside>
+
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="Assets/Scripts/api.js"></script>
+  <script src="Assets/Scripts/render.js"></script>
+  <script src="Assets/Scripts/map.js"></script>
+  <script src="Assets/Scripts/filter.js"></script>
+  <script src="Assets/Scripts/favorites.js"></script>
+  <script src="Assets/Scripts/ui.js"></script>
+  <script src="Assets/Scripts/app.js"></script>
+
 </body>
 
 </html>
