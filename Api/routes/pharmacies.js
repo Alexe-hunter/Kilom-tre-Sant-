@@ -1,74 +1,24 @@
-/*
-  ============================================================
-  routes/pharmacies.js — Les routes de l'API
-  
-  QU'EST-CE QU'UNE ROUTE ?
-  Une route = une URL + une méthode HTTP + une action.
-  
-  Ex : GET /api/pharmacies
-       ─── méthode HTTP (lecture)
-           ─────────────── URL
-  
-  MÉTHODES HTTP :
-  GET    → lire des données (pas de modification)
-  POST   → créer une nouvelle ressource
-  PATCH  → modifier partiellement une ressource existante
-  DELETE → supprimer une ressource
-  
-  PARAMÈTRES D'URL :
-  /api/pharmacies/:id   → :id est un paramètre dynamique
-                          /api/pharmacies/6 → req.params.id = "6"
-  
-  QUERY STRINGS :
-  /api/pharmacies?garde=true → req.query.garde = "true"
-  /api/pharmacies?q=paracetamol → req.query.q = "paracetamol"
-  ============================================================
-*/
-
+// mes routes liées aux pharmacies, regroupées dans ce fichier pour plus de clarté
 const express = require('express');
 
-/*
-  express.Router() crée un "mini-routeur" isolé.
-  On définit les routes ici, puis on les "monte" dans server.js
-  sous le préfixe /api.
-  
-  Avantage : si on veut changer /api en /v1, on change
-  une seule ligne dans server.js.
-*/
+// On crée un router Express pour définir nos routes liées aux pharmacies.
 const router = express.Router();
 
-/* Import des données (notre "base de données" en mémoire) */
+// importation de notre "base de données" de pharmacies (fichier JSON)
 const pharmacies = require('../data/pharmacies');
 
 
-/* ═══════════════════════════════════════════════════
-   ROUTE 1 : GET /api/pharmacies
-   Retourne toutes les pharmacies, avec filtres optionnels
-   
-   Exemples d'appels :
-   GET /api/pharmacies              → toutes les pharmacies
-   GET /api/pharmacies?garde=true   → seulement celles de garde
-   GET /api/pharmacies?q=mavré      → recherche par nom/quartier
-   GET /api/pharmacies?arr=3        → filtre par arrondissement
-═══════════════════════════════════════════════════ */
+// route 1 : GET /api/pharmacies
+// retourne la liste des pharmacies, avec des filtres optionnels
 router.get('/', (req, res) => {
 
-  /*
-    On commence avec toutes les pharmacies.
-    On va filtrer progressivement selon les query params reçus.
-    
-    [...pharmacies] crée une copie du tableau.
-    Si on modifiait directement `pharmacies`, les filtres
-    s'accumuleraient entre les requêtes → bug.
-  */
+// je commence par faire une copie du tableau de pharmacies pour pouvoir le filtrer sans toucher à l'original
   let resultats = [...pharmacies];
 
-  /* Filtre 1 : seulement de garde */
   if (req.query.garde === 'true') {
     resultats = resultats.filter(p => p.deGarde === true);
   }
 
-  /* Filtre 2 : recherche textuelle sur nom, quartier, arrondissement */
   if (req.query.q) {
     const terme = req.query.q.toLowerCase().trim();
     resultats = resultats.filter(p =>
@@ -78,29 +28,14 @@ router.get('/', (req, res) => {
     );
   }
 
-  /* Filtre 3 : par arrondissement exact */
   if (req.query.arr) {
     resultats = resultats.filter(p =>
       p.arrondissement === req.query.arr
     );
   }
 
-  /*
-    On retourne les pharmacies SANS le catalogue pour alléger la réponse.
-    Le catalogue complet sera chargé seulement quand l'utilisateur
-    clique sur une pharmacie spécifique (route 2).
-    
-    map() crée un nouveau tableau en transformant chaque élément.
-    On utilise la déstructuration : { catalogue, ...reste }
-    catalogue reçoit le tableau de médicaments → on l'exclut
-    ...reste reçoit toutes les autres propriétés → on les garde
-  */
   const resultatsLegers = resultats.map(({ catalogue, ...reste }) => reste);
 
-  /*
-    res.json() sérialise l'objet en JSON et envoie la réponse HTTP.
-    Express ajoute automatiquement le header Content-Type: application/json
-  */
   res.json({
     total: resultatsLegers.length,
     garde: resultatsLegers.filter(p => p.deGarde).length,
@@ -109,47 +44,25 @@ router.get('/', (req, res) => {
 });
 
 
-/* ═══════════════════════════════════════════════════
-   ROUTE 2 : GET /api/pharmacies/:id
-   Retourne UNE pharmacie avec son catalogue complet
-   
-   Exemple : GET /api/pharmacies/6
-   → retourne la pharmacie id=6 avec tous ses médicaments
-═══════════════════════════════════════════════════ */
+// route 2 : GET /api/pharmacies/:id
+// retourne les détails d'une pharmacie, y compris son catalogue
 router.get('/:id', (req, res) => {
 
-  /*
-    req.params.id est une CHAÎNE DE CARACTÈRES ("6").
-    On doit convertir en nombre avec parseInt() pour comparer
-    avec pharmacie.id qui est un nombre (6).
-    
-    Sans parseInt : "6" === 6 → false (types différents) → bug
-    Avec parseInt  :  6  === 6 → true → ça marche
-  */
   const id = parseInt(req.params.id, 10);
 
-  /* find() retourne le premier élément qui satisfait la condition */
   const pharmacie = pharmacies.find(p => p.id === id);
 
-  /* Si aucune pharmacie avec cet id, on retourne une erreur 404 */
   if (!pharmacie) {
     return res.status(404).json({
       erreur: `Pharmacie avec l'id ${id} introuvable`
     });
   }
 
-  /* Ici on retourne TOUT, y compris le catalogue */
   res.json(pharmacie);
 });
 
-
-/* ═══════════════════════════════════════════════════
-   ROUTE 3 : GET /api/pharmacies/:id/catalogue
-   Recherche un médicament dans le catalogue d'une pharmacie
-   
-   Exemple : GET /api/pharmacies/6/catalogue?q=paracetamol
-   → retourne les médicaments correspondants dans la pharmacie 6
-═══════════════════════════════════════════════════ */
+// route 3 : GET /api/pharmacies/:id/catalogue
+// retourne le catalogue d'une pharmacie, avec des filtres optionnels
 router.get('/:id/catalogue', (req, res) => {
 
   const id = parseInt(req.params.id, 10);
@@ -161,7 +74,6 @@ router.get('/:id/catalogue', (req, res) => {
 
   let catalogue = [...pharmacie.catalogue];
 
-  /* Filtre par nom de médicament */
   if (req.query.q) {
     const terme = req.query.q.toLowerCase().trim();
     catalogue = catalogue.filter(med =>
@@ -170,7 +82,6 @@ router.get('/:id/catalogue', (req, res) => {
     );
   }
 
-  /* Filtre : seulement les disponibles */
   if (req.query.disponible === 'true') {
     catalogue = catalogue.filter(med => med.disponible);
   }
@@ -182,14 +93,8 @@ router.get('/:id/catalogue', (req, res) => {
   });
 });
 
-
-/* ═══════════════════════════════════════════════════
-   ROUTE 4 : GET /api/recherche-medicament
-   Cherche un médicament dans TOUTES les pharmacies
-   
-   Exemple : GET /api/recherche-medicament?q=artemether&garde=true
-   → retourne toutes les pharmacies (de garde) qui ont ce médicament
-═══════════════════════════════════════════════════ */
+// route 4 : GET /api/pharmacies/medicament/recherche?q=...
+// recherche un médicament dans toutes les pharmacies, avec des filtres optionnels
 router.get('/medicament/recherche', (req, res) => {
 
   if (!req.query.q) {
@@ -199,12 +104,10 @@ router.get('/medicament/recherche', (req, res) => {
   const terme = req.query.q.toLowerCase().trim();
   let sources = pharmacies;
 
-  /* Optionnellement filtrer par statut de garde */
   if (req.query.garde === 'true') {
     sources = sources.filter(p => p.deGarde);
   }
 
-  /* Pour chaque pharmacie, cherche dans son catalogue */
   const resultats = sources
     .map(p => {
       const medicamentsTrouves = p.catalogue.filter(med =>
@@ -212,10 +115,8 @@ router.get('/medicament/recherche', (req, res) => {
         med.categorie.toLowerCase().includes(terme)
       );
 
-      /* Si aucun médicament trouvé dans cette pharmacie, on l'exclut */
       if (medicamentsTrouves.length === 0) return null;
 
-      /* On retourne les infos de la pharmacie + les médicaments trouvés */
       return {
         pharmacieId: p.id,
         pharmacieNom: p.nom,
@@ -227,7 +128,7 @@ router.get('/medicament/recherche', (req, res) => {
         medicaments: medicamentsTrouves
       };
     })
-    /* .filter(Boolean) supprime les null (pharmacies sans résultat) */
+
     .filter(Boolean);
 
   res.json({
@@ -238,5 +139,5 @@ router.get('/medicament/recherche', (req, res) => {
 });
 
 
-/* Export du router pour server.js */
+// exportation du router pour pouvoir l'utiliser dans notre application Express principale (app.js)
 module.exports = router;

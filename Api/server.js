@@ -1,10 +1,14 @@
-// mon serveur Express pour l'API Kilomètre-Santé
+// mon serveur Express
+
 const express = require('express');
+
 const cors = require('cors');
+
+// creation de mon app express
 const app = express();
 
+// configuration du port d'écoute (en prod, c'est souvent défini par l'hébergeur)
 const PORT = process.env.PORT || 3000;
-
 
 app.use(cors());
 
@@ -16,11 +20,12 @@ app.use((req, res, next) => {
   next();
 });
 
-
+// mes routes (endpoints) sont définies dans des fichiers séparés
 const pharmaciesRouter = require('./routes/pharmacies');
 app.use('/api/pharmacies', pharmaciesRouter);
 
 
+// les routes racines ou d'autres routes spécifiques peuvent être définies ici
 app.get('/', (req, res) => {
   res.json({
     message: 'API Kilomètre-Santé opérationnelle',
@@ -38,13 +43,15 @@ app.get('/', (req, res) => {
 });
 
 
+// gestion des routes non trouvées (404)
 app.use((req, res) => {
   res.status(404).json({
     erreur: `Route ${req.method} ${req.url} introuvable`
   });
 });
 
-// Démarrage du serveur
+
+// et enfin le demarrage du serveur
 app.listen(PORT, () => {
   console.log('════════════════════════════════════════');
   console.log(`  Kilomètre-Santé API démarrée`);

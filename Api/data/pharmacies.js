@@ -1,7 +1,7 @@
 // mon systeme de données pour les pharmacies de Pointe-Noire
-
 const pharmacies = [
 
+  // donnée du premier arrondissement, centre-ville
   {
     id: 1,
     nom: "Pharmacie de la Poste",
@@ -12,6 +12,7 @@ const pharmacies = [
     horaires: "07h30 – 21h00",
     deGarde: true,
 
+    // valeur pour les coordonnées vis à vis de leaflet
     lat: -4.7740,
     lng: 11.8637,
     catalogue: [
@@ -66,11 +67,12 @@ const pharmacies = [
     ]
   },
 
+  // donnée de deuxième arrandissemnet
   {
     id: 4,
     nom: "Pharmacie Lumumba",
     quartier: "Lumumba",
-    arrondissement: "Mvoumvou",
+    arrondissement: "Mvou-Mvou",
     adresse: "Rue Patrice Lumumba, carrefour principal",
     telephone: "+242 06 660 00 04",
     horaires: "07h30 – 21h30",
@@ -91,7 +93,7 @@ const pharmacies = [
     id: 5,
     nom: "Pharmacie Mvou-Mvou",
     quartier: "Mvou-Mvou",
-    arrondissement: "Mvoumvou",
+    arrondissement: "Mvou-Mvou",
     adresse: "Avenue de l'Indépendance, Mvou-Mvou",
     telephone: "+242 06 660 00 05",
     horaires: "08h00 – 20h00",
@@ -104,6 +106,7 @@ const pharmacies = [
       { id: "p018", nom: "Pommade Bétaméthasone", categorie: "Dermatologie", prix: 2200, disponible: true }
     ]
   },
+
 
   {
     id: 6,
@@ -147,11 +150,12 @@ const pharmacies = [
     ]
   },
 
+  // donnée du quatrième arrondissement, Loandjili
   {
     id: 8,
     nom: "Pharmacie Saint-Joseph",
     quartier: "Loandjili",
-    arrondissement: "Louandjili",
+    arrondissement: "Loandjili",
     adresse: "Rue de l'Hôpital, près CHU Loandjili",
     telephone: "+242 06 660 00 08",
     horaires: "07h00 – 22h00",
@@ -173,7 +177,7 @@ const pharmacies = [
     id: 9,
     nom: "Pharmacie du CHU",
     quartier: "Zone Hospitalière",
-    arrondissement: "Louandjili",
+    arrondissement: "Loandjili",
     adresse: "CHU de Pointe-Noire, aile principale",
     telephone: "+242 06 660 00 09",
     horaires: "24h/24 – 7j/7",
@@ -193,11 +197,12 @@ const pharmacies = [
     ]
   },
 
+// donnée du cinquième arrondissement, Mongo-Mpoukou
   {
     id: 10,
     nom: "Pharmacie Mongo-Mpoukou",
     quartier: "Mongo-Mpoukou",
-    arrondissement: "Mongo-Mpoukou",
+    arrondissement: "mongo-Mpoukou",
     adresse: "Carrefour Mongo-Mpoukou, avenue principale",
     telephone: "+242 06 660 00 10",
     horaires: "08h00 – 21h00",
@@ -234,6 +239,7 @@ const pharmacies = [
     ]
   },
 
+  // donnée du sixième arrondissement, Côte Sauvage et Vindoulou
   {
     id: 12,
     nom: "Pharmacie de la Côte Sauvage",
@@ -273,5 +279,5 @@ const pharmacies = [
   }
 ];
 
-// exportation du module pour utilisation dans d'autres parties de l'application
+// exportation du module pour pouvoir l'utiliser dans d'autres fichiers
 module.exports = pharmacies;
