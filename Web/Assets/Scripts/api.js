@@ -1,5 +1,9 @@
 // mon API_URL doit correspondre à l'adresse de mon serveur backend
-const API_URL = 'http://localhost:3000/api';
+const API_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:3000/api"
+    : "https://kilom-tre-sant.onrender.com/api";
+
 
 
 /** recuperation de la liste des pharmacies avec les filtres de recherche
