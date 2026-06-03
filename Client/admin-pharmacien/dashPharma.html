@@ -1,0 +1,250 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../Assets/img/admin-logo.png" type="image/x-icon">
+        <link rel="stylesheet" href="../Assets/Styles/main.css">
+    <link rel="stylesheet" href="../Assets/Styles/dashPharma.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>Kilomètre-Santé</title>
+    
+</head>
+<body>
+
+    <!--hero-->
+    <section class="hero-video">
+        
+        <video class="hero-video__video" autoplay muted loop playsinline>
+            <source src="../../Web/Videos/hero-video1.mp4" type="video/mp4">
+        </video>
+
+        <div class="hero-video__overlay"></div>
+
+        <div class="hero-video__content">
+            <h1 class="hero-video__title">Kilomètre<span>-Santé</span></h1>
+            <p class="hero-video__subtitle">Dashboard Pharmacien</p>
+        </div>
+
+    </section>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="sidebar__header">
+            <img src="../Assets/img/admin-logo.png" alt="Logo" class="sidebar__logo">
+            <h2 class="sidebar__title">Kilomètre<span>-Santé</span></h2>
+        </div>
+
+        <nav class="sidebar__nav">
+
+            <a href="#" class="sidebar__link active">
+                <i class="fas fa-home"></i>
+                <span>Accueil</span>
+            </a>
+            <a href="#" class="sidebar__link">
+                <i class="fas fa-pills"></i>
+                <span>Catalogue</span>
+            </a>
+            <a href="#" class="sidebar__link">
+                <i class="fas fa-clock"></i>
+                <span>Horaires</span>
+            </a>
+            <a href="#" class="sidebar__link">
+                <i class="fas fa-heartbeat"></i>
+                <span>Garde</span>
+            </a>
+            <a href="#" class="sidebar__link">
+                <i class="fas fa-chart-bar"></i>
+                <span>Statistiques</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar__footer">
+
+            <a href="#" class="sidebar__link sidebar__link--logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Déconnexion</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+    <main class="main-content">
+        <!-- menu gurber-->
+        <button class="mobile-menu-btn" id="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- overlay -->
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+        <!-- Header -->
+        <header class="main-header">
+
+            <div class="main-header__left">
+                <h1 class="main-header__title">Dashboard Pharmacien</h1>
+                <p class="main-header__subtitle">Bienvenue, Pharmacien</p>
+            </div>
+
+            <div class="main-header__right">
+                <div class="main-header__user">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- cards pour les stats-->
+        <section class="stats-section">
+
+            <div class="stat-card">
+
+                <div class="stat-card__icon stat-card__icon--green">
+                    <i class="fas fa-pills"></i>
+                </div>
+
+                <div class="stat-card__content">
+                    <h3 class="stat-card__value">156</h3>
+                    <p class="stat-card__label">Médicaments</p>
+                </div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-card__icon stat-card__icon--blue">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+
+                <div class="stat-card__content">
+                    <h3 class="stat-card__value">142</h3>
+                    <p class="stat-card__label">Disponibles</p>
+                </div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-card__icon stat-card__icon--red">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+
+                <div class="stat-card__content">
+                    <h3 class="stat-card__value">14</h3>
+                    <p class="stat-card__label">Ruptures</p>
+                </div>
+
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card__icon stat-card__icon--orange">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+
+                <div class="stat-card__content">
+                    <h3 class="stat-card__value">Oui</h3>
+                    <p class="stat-card__label">De garde</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- section action rapide -->
+        <section class="actions-section">
+
+            <h2 class="section-title">Actions rapides</h2>
+
+            <div class="actions-grid">
+
+                <button class="action-card">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Ajouter médicament</span>
+                </button>
+
+                <button class="action-card">
+                    <i class="fas fa-edit"></i>
+                    <span>Modifier stock</span>
+                </button>
+
+                <button class="action-card">
+                    <i class="fas fa-clock"></i>
+                    <span>Modifier horaires</span>
+                </button>
+
+                <button class="action-card">
+                    <i class="fas fa-bell"></i>
+                    <span>Gérer garde</span>
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- activités recentes -->
+        <section class="activity-section">
+
+            <h2 class="section-title">Activité récente</h2>
+
+            <div class="activity-list">
+
+                <div class="activity-item">
+                    <div class="activity-item__icon activity-item__icon--success">
+                        <i class="fas fa-plus"></i>
+                    </div>
+
+                    <div class="activity-item__content">
+                        <p class="activity-item__text">Médicament ajouté : Paracétamol 500mg</p>
+                        <p class="activity-item__time">Il y a 2 heures</p>
+                    </div>
+
+                </div>
+
+                <div class="activity-item">
+
+                    <div class="activity-item__icon activity-item__icon--warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+
+                    <div class="activity-item__content">
+                        <p class="activity-item__text">Rupture de stock : Amoxicilline 500mg</p>
+                        <p class="activity-item__time">Il y a 5 heures</p>
+                    </div>
+
+                </div>
+
+                <div class="activity-item">
+
+                    <div class="activity-item__icon activity-item__icon--info">
+                        <i class="fas fa-clock"></i>
+                    </div>
+
+                    <div class="activity-item__content">
+                        <p class="activity-item__text">Horaires modifiés : 08h00 - 22h00</p>
+                        <p class="activity-item__time">Hier</p>
+                    </div>
+
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-item__icon activity-item__icon--success">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    
+                    <div class="activity-item__content">
+                        <p class="activity-item__text">Garde activée pour cette semaine</p>
+                        <p class="activity-item__time">Il y a 2 jours</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+    </main>
+
+    <script type="module" src="../Assets/Scripts/dashPharma.js"></script>
+</body>
+</html>
