@@ -29,11 +29,10 @@
         </h1>
       </div>
 
-      <!--competeur-->
-      <div class="header__badge" id="header-badge" aria-live="polite">
-        <span class="badge__dot"></span>
-        Chargement...
-      </div>
+      <!-- Bouton connexion -->
+      <a href="/Client/Index.html" class="header__badge btn-espace-pro">
+        <i class="fas fa-user-shield"></i> Espace Pro
+      </a>
 
     </div>
   </header>
@@ -47,7 +46,32 @@
     <div class="hero-video__content">
       <h1 class="hero-video__title">Kilomètre<span>-Santé</span></h1>
       <p class="hero-video__subtitle">Trouvez les pharmacies de garde à Pointe-Noire</p>
+      
+      <!-- Indicateurs beaucoup mieux visible sur hero, plus de style je trouve, nice-->
+      <div class="hero-stats">
+
+        <div class="hero-stat-card">
+          <div class="hero-stat-card__icon"><i class="fas fa-hospital"></i></div>
+          <div class="hero-stat-card__value" id="stat-total">13</div>
+          <div class="hero-stat-card__label">Pharmacies</div>
+        </div>
+
+        <div class="hero-stat-card hero-stat-card--active">
+          <div class="hero-stat-card__icon"><i class="fas fa-heartbeat"></i></div>
+          <div class="hero-stat-card__value" id="stat-garde">...</div>
+          <div class="hero-stat-card__label">De Garde</div>
+        </div>
+
+        <div class="hero-stat-card">
+          <div class="hero-stat-card__icon"><i class="fas fa-map-marked-alt"></i></div>
+          <div class="hero-stat-card__value">6</div>
+          <div class="hero-stat-card__label">Arrondissements</div>
+        </div>
+
+      </div>
+
     </div>
+
   </section>
 
 

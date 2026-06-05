@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../Assets/img/admin-logo.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../Assets/Styles/main.css">
+    <link rel="stylesheet" href="../Assets/Styles/dashAdmin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>Administration — Kilomètre-Santé</title>
+</head>
+<body>
+
+    <!-- Barre latérale (Sidebar) -->
+    <aside class="sidebar">
+        <div class="sidebar__header">
+            <h2 class="sidebar__title">Kilomètre<span>-Santé</span></h2>
+            <p class="sidebar__role-tag">Super-Admin</p>
+        </div>
+
+        <nav class="sidebar__nav">
+            <a href="#" class="sidebar__link active" data-tab="pharmacies">
+                <i class="fas fa-hospital"></i>
+                <span>Pharmacies</span>
+            </a>
+            <a href="/" class="sidebar__link">
+                <i class="fas fa-map"></i>
+                <span>Carte publique</span>
+            </a>
+        </nav>
+
+        <div class="sidebar__footer">
+            <button class="sidebar__link sidebar__link--logout" id="btn-logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Déconnexion</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Contenu Principal -->
+    <main class="main-content">
+        
+        <!-- En-tête du tableau de bord -->
+        <header class="main-header">
+            <div class="main-header__left">
+                <h1 class="main-header__title">Tableau de bord</h1>
+                <p class="main-header__subtitle">Gestion du réseau des pharmacies de garde</p>
+            </div>
+            <div class="main-header__right">
+                <div class="user-profile">
+                    <span class="user-profile__name" id="user-display-name">Administrateur</span>
+                    <div class="user-avatar">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Section Statistiques (KPI) -->
+        <section class="stats-section">
+            <div class="stat-card">
+                <div class="stat-card__icon stat-card__icon--blue">
+                    <i class="fas fa-hospital"></i>
+                </div>
+                <div class="stat-card__content">
+                    <h3 class="stat-card__value" id="kpi-total">0</h3>
+                    <p class="stat-card__label">Pharmacies</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card__icon stat-card__icon--green">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <div class="stat-card__content">
+                    <h3 class="stat-card__value" id="kpi-garde">0</h3>
+                    <p class="stat-card__label">De Garde</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card__icon stat-card__icon--orange">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="stat-card__content">
+                    <h3 class="stat-card__value" id="kpi-ferme">0</h3>
+                    <p class="stat-card__label">Hors Garde</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Principale : Liste & Actions -->
+        <section class="content-panel">
+            <div class="panel-header">
+                <h2 class="panel-title">Liste des pharmacies</h2>
+                <button class="btn btn-primary" id="btn-add-pharmacy">
+                    <i class="fas fa-plus"></i> Ajouter une pharmacie
+                </button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table" id="pharmacies-table">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Quartier / Arrondissement</th>
+                            <th>Téléphone</th>
+                            <th>Horaires</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <tr>
+                            <td colspan="6" class="table-loading">Chargement des données...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Overlay & Panneau d'édition/ajout (Slide-over) -->
+    <div class="slide-overlay" id="slide-overlay"></div>
+    
+    <aside class="slide-panel" id="slide-panel">
+        <div class="slide-panel__header">
+            <h3 class="slide-panel__title" id="panel-form-title">Ajouter une pharmacie</h3>
+            <button class="btn-close-panel" id="btn-close-panel"><i class="fas fa-times"></i></button>
+        </div>
+
+        <form class="slide-form" id="pharmacy-form">
+            <input type="hidden" id="form-pharmacy-id">
+            
+            <div class="form-group">
+                <label for="form-nom">Nom de la pharmacie</label>
+                <input type="text" id="form-nom" required placeholder="Pharmacie du Congo">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="form-arrondissement">Arrondissement</label>
+                    <select id="form-arrondissement" required>
+                        <option value="Lumumba">1. Lumumba</option>
+                        <option value="Mvou-Mvou">2. Mvou-Mvou</option>
+                        <option value="Tié-Tié">3. Tié-Tié</option>
+                        <option value="Loandjili">4. Loandjili</option>
+                        <option value="mongo-Mpoukou">5. Mongo-Mpoukou</option>
+                        <option value="Ngoyo">6. Ngoyo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="form-quartier">Quartier</label>
+                    <input type="text" id="form-quartier" required placeholder="Centre-ville">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="form-adresse">Adresse complète</label>
+                <input type="text" id="form-adresse" placeholder="Avenue de l'Indépendance, face au cinéma">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="form-telephone">Téléphone</label>
+                    <input type="text" id="form-telephone" placeholder="+242 06 660 00 00">
+                </div>
+                <div class="form-group">
+                    <label for="form-horaires">Horaires</label>
+                    <input type="text" id="form-horaires" placeholder="07h30 – 21h00">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="form-lat">Latitude (Coordonnées carte)</label>
+                    <input type="number" id="form-lat" step="any" required placeholder="-4.7740">
+                </div>
+                <div class="form-group">
+                    <label for="form-lng">Longitude (Coordonnées carte)</label>
+                    <input type="number" id="form-lng" step="any" required placeholder="11.8637">
+                </div>
+            </div>
+
+            <div class="form-group form-checkbox">
+                <label class="checkbox-container">
+                    <input type="checkbox" id="form-degarde">
+                    <span class="checkmark"></span>
+                    Actuellement de garde
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" id="btn-submit-form">Enregistrer</button>
+        </form>
+    </aside>
+
+    <!-- Boîte de Toast Notifications -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script type="module" src="../Assets/Scripts/dashAdmin.js"></script>
+</body>
+</html>

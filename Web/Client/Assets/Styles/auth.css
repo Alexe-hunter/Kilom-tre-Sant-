@@ -1,0 +1,316 @@
+/* auth.css - Styles de la page de connexion de l'espace pro de mes administrateurs */
+
+.auth-body {
+    background-color: var(--c-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: var(--s-4);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Formes lumineuses en arrière-plan */
+.auth-bg-shapes {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.12;
+}
+
+.shape-1 {
+    width: 300px;
+    height: 300px;
+    background: var(--c-garde);
+    top: 10%;
+    left: 15%;
+    animation: float-slow 12s infinite alternate ease-in-out;
+}
+
+.shape-2 {
+    width: 400px;
+    height: 400px;
+    background: var(--c-accent);
+    bottom: 10%;
+    right: 15%;
+    animation: float-slow 16s infinite alternate-reverse ease-in-out;
+}
+
+@keyframes float-slow {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    100% {
+        transform: translate(30px, 30px) scale(1.1);
+    }
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 440px;
+    position: relative;
+    z-index: 1;
+    animation: auth-fade-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes auth-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.auth-card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-lg);
+    box-shadow: 0 12px 40px rgba(0, 87, 35, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
+    padding: var(--s-8) var(--s-6) var(--s-6);
+    position: relative;
+    overflow: hidden;
+}
+
+
+.auth-card__header {
+    text-align: center;
+    margin-bottom: var(--s-6);
+}
+
+.auth-card__header img{
+    whidth: 80px;
+    height: 80px;
+}
+
+.auth-title {
+    font-family: var(--font-title);
+    font-size: var(--t-2xl);
+    font-weight: 800;
+    color: var(--c-text);
+    margin-bottom: var(--s-1);
+}
+
+.auth-title span {
+    color: var(--c-garde);
+}
+
+.auth-subtitle {
+    font-size: var(--t-sm);
+    color: var(--c-muted);
+    font-weight: 500;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-4);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-2);
+}
+
+.form-label {
+    font-size: var(--t-xs);
+    font-weight: 700;
+    color: var(--c-text);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: var(--s-4);
+    color: var(--c-muted);
+    font-size: var(--t-base);
+    pointer-events: none;
+    transition: color var(--tr);
+}
+
+.form-input {
+    width: 100%;
+    padding: var(--s-3) var(--s-4) var(--s-3) 2.75rem;
+    border: 2px solid var(--c-border);
+    border-radius: var(--r-md);
+    font-family: var(--font-body);
+    font-size: var(--t-base);
+    background: var(--c-bg);
+    color: var(--c-text);
+    outline: none;
+    transition: border-color var(--tr), box-shadow var(--tr), var(--tr);
+}
+
+.form-input:focus {
+    border-color: var(--c-accent);
+    background: var(--c-surface);
+    box-shadow: 0 0 0 4px rgba(0, 126, 51, 0.08);
+}
+
+.form-input:focus+.input-icon {
+    color: var(--c-accent);
+}
+
+
+.btn-toggle-password {
+    position: absolute;
+    right: var(--s-3);
+    background: none;
+    border: none;
+    color: var(--c-muted);
+    cursor: pointer;
+    font-size: var(--t-sm);
+    padding: var(--s-1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color var(--tr);
+}
+
+.btn-toggle-password:hover {
+    color: var(--c-accent);
+}
+
+.btn-submit {
+    margin-top: var(--s-3);
+    background: var(--c-accent);
+    color: white;
+    border: none;
+    border-radius: var(--r-md);
+    padding: var(--s-3) var(--s-4);
+    font-family: var(--font-body);
+    font-size: var(--t-base);
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--s-2);
+    box-shadow: 0 4px 14px rgba(0, 126, 51, 0.2);
+    transition: var(--tr), transform var(--tr), box-shadow var(--tr);
+    position: relative;
+}
+
+.btn-submit:hover {
+    background: var(--c-accent-dark);
+}
+
+.btn-submit:active {
+    transform: scale(0.98);
+}
+
+.btn-submit:disabled {
+    background: var(--c-muted);
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-spinner {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top: 3px solid white;
+    border-radius: 50%;
+    animation: spin-anim 0.8s linear infinite;
+    position: absolute;
+}
+
+@keyframes spin-anim {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Mode chargement du bouton */
+.btn-submit.loading .btn-text,
+.btn-submit.loading .btn-icon {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.btn-submit.loading .btn-spinner {
+    display: block;
+}
+
+/* css du mesg d'erreur*/
+.auth-error-box {
+    display: none;
+    align-items: center;
+    gap: var(--s-3);
+    background: #FFF5F5;
+    border: 1px solid #FFCDD2;
+    color: var(--c-fav);
+    border-radius: var(--r-md);
+    padding: var(--s-3) var(--s-4);
+    font-size: var(--t-sm);
+    font-weight: 500;
+    margin-bottom: var(--s-4);
+    animation: shake-anim 0.4s ease;
+}
+
+.auth-error-box.visible {
+    display: flex;
+}
+
+@keyframes shake-anim {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-6px);
+    }
+
+    75% {
+        transform: translateX(6px);
+    }
+}
+
+.auth-card__footer {
+    margin-top: var(--s-6);
+    border-top: 1px solid var(--c-border);
+    padding-top: var(--s-4);
+    text-align: center;
+}
+
+.btn-back-home {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    color: var(--c-muted);
+    font-size: var(--t-sm);
+    font-weight: 500;
+    text-decoration: none;
+    transition: color var(--tr);
+}
+
+.btn-back-home:hover {
+    color: var(--c-accent);
+}

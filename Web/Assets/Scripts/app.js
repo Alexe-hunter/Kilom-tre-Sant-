@@ -17,11 +17,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   buildArrondissementFilters(data.pharmacies);
 
   initFilters();
+  const total = data.pharmacies.length;
   const garde = data.pharmacies.filter(p => p.deGarde).length;
-  document.getElementById('header-badge').innerHTML = `
-    <span class="badge__dot"></span>
-    ${garde} de garde sur ${data.pharmacies.length}
-  `;
+  
+  const statTotal = document.getElementById('stat-total');
+  const statGarde = document.getElementById('stat-garde');
+  if (statTotal) statTotal.textContent = total;
+  if (statGarde) statGarde.textContent = garde;
 
   console.log(`<i class="fa-solid fa-check"></i> ${data.total} pharmacies chargées — ${data.garde} de garde`);
 });
