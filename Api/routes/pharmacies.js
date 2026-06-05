@@ -12,7 +12,7 @@ const pharmacies = require('../data/pharmacies');
 // retourne la liste des pharmacies, avec des filtres optionnels
 router.get('/', (req, res) => {
 
-// je commence par faire une copie du tableau de pharmacies pour pouvoir le filtrer sans toucher à l'original
+  // je commence par faire une copie du tableau de pharmacies pour pouvoir le filtrer sans toucher à l'original
   let resultats = [...pharmacies];
 
   if (req.query.garde === 'true') {
@@ -22,8 +22,8 @@ router.get('/', (req, res) => {
   if (req.query.q) {
     const terme = req.query.q.toLowerCase().trim();
     resultats = resultats.filter(p =>
-      p.nom.toLowerCase().includes(terme)          ||
-      p.quartier.toLowerCase().includes(terme)     ||
+      p.nom.toLowerCase().includes(terme) ||
+      p.quartier.toLowerCase().includes(terme) ||
       p.arrondissement.toLowerCase().includes(terme)
     );
   }
@@ -138,6 +138,130 @@ router.get('/medicament/recherche', (req, res) => {
   });
 });
 
+
+// Importation du middleware d'authentification
+const { authMiddleware } = require('../middleware/auth');
+
+// route 5 : POST /api/pharmacies (Ajouter une pharmacie) - Super Admin seulement
+router.post('/', authMiddleware, (req, res) => {
+  if (req.user.role !== 'super-admin') {
+    return res.status(403).json({ erreur: "Seul l'administrateur peut ajouter des pharmacies." });
+  }
+
+  const { nom, quartier, arrondissement, adresse, telephone, horaires, deGarde, lat, lng } = req.body;
+
+  if (!nom || !quartier || !arrondissement || !lat || !lng) {
+    return res.status(400).json({ erreur: "Les champs nom, quartier, arrondissement, latitude et longitude sont requis." });
+  }
+
+  const nouvelId = pharmacies.length > 0 ? Math.max(...pharmacies.map(p => p.id)) + 1 : 1;
+
+  const nouvellePharmacie = {
+    id: nouvelId,
+    nom,
+    quartier,
+    arrondissement,
+    adresse: adresse || "",
+    telephone: telephone || "",
+    horaires: horaires || "08h00 - 20h00",
+    deGarde: deGarde === true || deGarde === 'true',
+    lat: parseFloat(lat),
+    lng: parseFloat(lng),
+    catalogue: []
+  };
+
+  pharmacies.push(nouvellePharmacie);
+
+  res.status(201).json({
+    message: "Pharmacie ajoutée avec succès.",
+    pharmacie: nouvellePharmacie
+  });
+});
+
+// route 6 : PUT /api/pharmacies/:id (Modifier une pharmacie) - Super Admin ou Pharmacien de cette pharmacie
+router.put('/:id', authMiddleware, (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const index = pharmacies.findIndex(p => p.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({ erreur: "Pharmacie introuvable." });
+  }
+
+  // Vérification des droits
+  if (req.user.role === 'pharmacien' && req.user.pharmacyId !== id) {
+    return res.status(403).json({ erreur: "Vous n'êtes pas autorisé à modifier cette pharmacie." });
+  }
+
+  const pharmacie = pharmacies[index];
+  const { nom, quartier, arrondissement, adresse, telephone, horaires, deGarde, lat, lng } = req.body;
+
+  // Si c'est le super-admin, il peut tout changer. Si c'est le pharmacien, il peut changer horaires, garde, téléphone, adresse.
+  if (req.user.role === 'super-admin') {
+    if (nom) pharmacie.nom = nom;
+    if (quartier) pharmacie.quartier = quartier;
+    if (arrondissement) pharmacie.arrondissement = arrondissement;
+    if (lat !== undefined) pharmacie.lat = parseFloat(lat);
+    if (lng !== undefined) pharmacie.lng = parseFloat(lng);
+  }
+
+  if (adresse !== undefined) pharmacie.adresse = adresse;
+  if (telephone !== undefined) pharmacie.telephone = telephone;
+  if (horaires !== undefined) pharmacie.horaires = horaires;
+  if (deGarde !== undefined) pharmacie.deGarde = (deGarde === true || deGarde === 'true');
+
+  res.json({
+    message: "Pharmacie mise à jour avec succès.",
+    pharmacie: pharmacie
+  });
+});
+
+// route 7 : DELETE /api/pharmacies/:id (Supprimer une pharmacie) - Super Admin seulement
+router.delete('/:id', authMiddleware, (req, res) => {
+  if (req.user.role !== 'super-admin') {
+    return res.status(403).json({ erreur: "Seul l'administrateur peut supprimer des pharmacies." });
+  }
+
+  const id = parseInt(req.params.id, 10);
+  const index = pharmacies.findIndex(p => p.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({ erreur: "Pharmacie introuvable." });
+  }
+
+  pharmacies.splice(index, 1);
+
+  res.json({
+    message: "Pharmacie supprimée avec succès."
+  });
+});
+
+// route 8 : PUT /api/pharmacies/:id/catalogue (Mettre à jour le catalogue) - Pharmacien de la pharmacie ou Super Admin
+router.put('/:id/catalogue', authMiddleware, (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const index = pharmacies.findIndex(p => p.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({ erreur: "Pharmacie introuvable." });
+  }
+
+  // Vérification des droits
+  if (req.user.role === 'pharmacien' && req.user.pharmacyId !== id) {
+    return res.status(403).json({ erreur: "Vous n'êtes pas autorisé à modifier le catalogue de cette pharmacie." });
+  }
+
+  const { medicaments } = req.body;
+  if (!Array.isArray(medicaments)) {
+    return res.status(400).json({ erreur: "Le champ medicaments doit être un tableau." });
+  }
+
+  pharmacies[index].catalogue = medicaments;
+
+  res.json({
+    message: "Catalogue mis à jour avec succès.",
+    total: pharmacies[index].catalogue.length,
+    medicaments: pharmacies[index].catalogue
+  });
+});
 
 // exportation du router pour pouvoir l'utiliser dans notre application Express principale (app.js)
 module.exports = router;

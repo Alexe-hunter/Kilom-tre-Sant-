@@ -22,7 +22,9 @@ app.use((req, res, next) => {
 
 // mes routes (endpoints) sont définies dans des fichiers séparés
 const pharmaciesRouter = require('./routes/pharmacies');
+const authRouter = require('./routes/auth');
 app.use('/api/pharmacies', pharmaciesRouter);
+app.use('/api/auth', authRouter);
 
 
 // les routes racines ou d'autres routes spécifiques peuvent être définies ici
