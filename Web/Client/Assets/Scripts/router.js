@@ -1,6 +1,6 @@
 // router.js - Système de navigation pour les différentes zones de l'application
 const routes = {
-    "login": "/auth.html",
+    "login": "/Client/auth.html",
     "admin": "/Client/super-admin/Admin.html",
     "pharma": "/Client/Pharmacien/Dash-Pharma.html",
     "gatekeeper": "/Client/Index.html",

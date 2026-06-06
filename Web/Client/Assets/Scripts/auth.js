@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 // Rediriger vers l'aiguilleur Gatekeeper
-                window.location.href = "Client/Index.html";
+                window.location.href = "/Client/Index.html";
 
             } catch (error) {
                 console.error("Connexion échouée :", error);

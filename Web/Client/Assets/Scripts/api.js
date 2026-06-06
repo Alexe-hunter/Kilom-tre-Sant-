@@ -19,7 +19,7 @@ function getHeaders() {
 // Déconnexion
 function logout() {
     localStorage.clear();
-    window.location.href = "/auth.html";
+    window.location.href = "/Client/auth.html";
 }
 
 // 1. Récupérer toutes les pharmacies
