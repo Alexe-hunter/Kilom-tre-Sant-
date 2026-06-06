@@ -1,21 +1,20 @@
-<!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../Assets/img/admin-logo.png" type="image/x-icon">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../Assets/Styles/main.css">
     <link rel="stylesheet" href="../Assets/Styles/dashAdmin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <title>Administration — Kilomètre-Santé</title>
 </head>
+
 <body>
 
-    <!-- Barre latérale (Sidebar) -->
+    <!--sidebarr-->
     <aside class="sidebar">
+
         <div class="sidebar__header">
             <h2 class="sidebar__title">Kilomètre<span>-Santé</span></h2>
             <p class="sidebar__role-tag">Super-Admin</p>
@@ -30,6 +29,7 @@
                 <i class="fas fa-map"></i>
                 <span>Carte publique</span>
             </a>
+            
         </nav>
 
         <div class="sidebar__footer">
@@ -38,30 +38,36 @@
                 <span>Déconnexion</span>
             </button>
         </div>
+
     </aside>
 
-    <!-- Contenu Principal -->
     <main class="main-content">
-        
-        <!-- En-tête du tableau de bord -->
+
         <header class="main-header">
+
             <div class="main-header__left">
                 <h1 class="main-header__title">Tableau de bord</h1>
                 <p class="main-header__subtitle">Gestion du réseau des pharmacies de garde</p>
             </div>
+
             <div class="main-header__right">
+
                 <div class="user-profile">
                     <span class="user-profile__name" id="user-display-name">Administrateur</span>
                     <div class="user-avatar">
                         <i class="fas fa-user-shield"></i>
                     </div>
+
                 </div>
+
             </div>
+
         </header>
 
-        <!-- Section Statistiques (KPI) -->
         <section class="stats-section">
+
             <div class="stat-card">
+
                 <div class="stat-card__icon stat-card__icon--blue">
                     <i class="fas fa-hospital"></i>
                 </div>
@@ -69,9 +75,11 @@
                     <h3 class="stat-card__value" id="kpi-total">0</h3>
                     <p class="stat-card__label">Pharmacies</p>
                 </div>
+
             </div>
 
             <div class="stat-card">
+
                 <div class="stat-card__icon stat-card__icon--green">
                     <i class="fas fa-heartbeat"></i>
                 </div>
@@ -79,9 +87,11 @@
                     <h3 class="stat-card__value" id="kpi-garde">0</h3>
                     <p class="stat-card__label">De Garde</p>
                 </div>
+
             </div>
 
             <div class="stat-card">
+
                 <div class="stat-card__icon stat-card__icon--orange">
                     <i class="fas fa-user-tie"></i>
                 </div>
@@ -90,10 +100,11 @@
                     <p class="stat-card__label">Hors Garde</p>
                 </div>
             </div>
+
         </section>
 
-        <!-- Section Principale : Liste & Actions -->
         <section class="content-panel">
+
             <div class="panel-header">
                 <h2 class="panel-title">Liste des pharmacies</h2>
                 <button class="btn btn-primary" id="btn-add-pharmacy">
@@ -118,15 +129,17 @@
                             <td colspan="6" class="table-loading">Chargement des données...</td>
                         </tr>
                     </tbody>
+
                 </table>
+
             </div>
         </section>
     </main>
 
-    <!-- Overlay & Panneau d'édition/ajout (Slide-over) -->
     <div class="slide-overlay" id="slide-overlay"></div>
-    
+
     <aside class="slide-panel" id="slide-panel">
+
         <div class="slide-panel__header">
             <h3 class="slide-panel__title" id="panel-form-title">Ajouter une pharmacie</h3>
             <button class="btn-close-panel" id="btn-close-panel"><i class="fas fa-times"></i></button>
@@ -134,14 +147,16 @@
 
         <form class="slide-form" id="pharmacy-form">
             <input type="hidden" id="form-pharmacy-id">
-            
+
             <div class="form-group">
                 <label for="form-nom">Nom de la pharmacie</label>
                 <input type="text" id="form-nom" required placeholder="Pharmacie du Congo">
             </div>
 
             <div class="form-row">
+
                 <div class="form-group">
+
                     <label for="form-arrondissement">Arrondissement</label>
                     <select id="form-arrondissement" required>
                         <option value="Lumumba">1. Lumumba</option>
@@ -150,7 +165,9 @@
                         <option value="Loandjili">4. Loandjili</option>
                         <option value="mongo-Mpoukou">5. Mongo-Mpoukou</option>
                         <option value="Ngoyo">6. Ngoyo</option>
+
                     </select>
+                    
                 </div>
                 <div class="form-group">
                     <label for="form-quartier">Quartier</label>
@@ -197,9 +214,9 @@
         </form>
     </aside>
 
-    <!-- Boîte de Toast Notifications -->
     <div class="toast-container" id="toast-container"></div>
 
     <script type="module" src="../Assets/Scripts/dashAdmin.js"></script>
 </body>
+
 </html>
