@@ -152,8 +152,38 @@ Project Kil_Santé/
     │   │   ├── ui.js             # Interface utilisateur
     │   │   └── app.js            # Point d'entrée
     │   ├── img/                  # Images
-    │   └── Videos/               # Vidéos (hero video)
+    │   └── Videos/               # Vidéos (hero video) 
 ```
+
+---
+
+## Espace Administration & Sécurité
+
+L'Espace Professionnel et Administration a été restructuré et complété pour offrir un contrôle total et sécurisé de l'application en temps réel.
+
+### Fonctionnement de l'Architecture & Routage
+1. **Aiguillage Centralisé (Gatekeeper)** : Les pages d'administration sont regroupées sous le dossier `/Client/`. L'accès à ce dossier passe par `/Client/Index.html` qui sert de routeur-gardien. Il vérifie la validité du jeton d'authentification (`token`) et le rôle (`role`) de l'utilisateur stocké dans le `localStorage` et effectue l'aiguillage automatique.
+2. **Page d'Authentification Unique** : Les pharmaciens et les super-administrateurs se connectent via `/auth.html`. Le backend authentifie l'utilisateur et retourne son rôle.
+3. **Sécurité (Route Guards)** : Si un utilisateur tente d'accéder directement à un tableau de bord par son URL (ex: `/Client/Pharmacien/Dash-Pharma.html`) sans être connecté, les scripts d'initialisation détectent l'absence de droits et le redirigent instantanément vers l'aiguillage.
+
+### Comptes de Test (Pré-configurés)
+Pour tester les différents espaces de l'application, utilisez les identifiants suivants :
+
+* **Super-Admin** (Gestion de tout le réseau, ajout/modification/suppression de pharmacies et statuts) :
+  * **Email** : `admin@kilometresante.cg`
+  * **Mot de passe** : `admin123`
+
+* **Pharmacien de la Poste** (Gestion du stock et horaires de sa propre pharmacie uniquement) :
+  * **Email** : `poste@kilometresante.cg`
+  * **Mot de passe** : `poste123`
+
+* **Pharmacien de la Centrale** :
+  * **Email** : `centrale@kilometresante.cg`
+  * **Mot de passe** : `centrale123`
+
+* **Autres Pharmaciens** (ex: Pharmacie ID 4 - Lumumba, etc.) :
+  * **Email** : `pharma4@kilometresante.cg` (incrémenter le numéro de 3 à 13)
+  * **Mot de passe** : `pharma4123` (remplacer le numéro correspondant)
 
 ---
 
@@ -178,3 +208,13 @@ Ce projet est développé dans le cadre de Kilomètre-Santé pour améliorer l'a
 
 dernière chose vidéo du hero non présente normal mon git push a été refusé
 la plupart des commit sont fait en local due au refus 
+
+### UI UX:
+- **design**: encore non - fourni, esquice réalisé par Lovable depuis le debut du projet
+- **flyer**: réalisé par votre hote, sur Canva à refaire sur photoshop pour plus de professionalisme
+- **pub - youtube**: en cours ......
+- **logo**: conçu par mes soins, que ce soit le logo client et le logo admin, conçu sur Affinity Studio
+
+## Suite du projet:
+
+Chargement .... Encore en cours de reflexion, la perfection tue donc stay cool mode activé.
