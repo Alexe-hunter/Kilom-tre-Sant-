@@ -1,8 +1,8 @@
 // mon serveur Express
 
 const express = require('express');
-
 const cors = require('cors');
+require('dotenv').config();
 
 // creation de mon app express
 const app = express();
@@ -61,3 +61,4 @@ app.listen(PORT, () => {
   console.log(`  http://localhost:${PORT}/api/pharmacies`);
   console.log('════════════════════════════════════════');
 });
+

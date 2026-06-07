@@ -49,7 +49,10 @@ INSERT INTO pharmacies (nom, quartier, arrondissement, adresse, telephone, horai
 ('Pharmacie Centrale', 'Centre-ville', 'Lumumba', 'Boulevard Marien Ngouabi, centre commercial', '+242 06 660 00 02', '07h00 – 22h00', TRUE, -4.776000, 11.865000),
 ('Pharmacie du Port', 'Centre-ville', 'Lumumba', 'Rue du Commerce, quartier port', '+242 06 660 00 03', '08h00 – 20h00', FALSE, -4.772000, 11.861000),
 ('Pharmacie Lumumba', 'Lumumba', 'Mvou-Mvou', 'Rue Patrice Lumumba, carrefour principal', '+242 06 660 00 04', '07h30 – 21h30', TRUE, -4.780000, 11.858000),
-('Pharmacie Mavré', 'Tié-Tié', 'Tié-Tié', 'Avenue de Tié-Tié, face au marché', '+242 06 660 00 06', '08h00 – 22h00', TRUE, -4.788000, 11.870000);
+('Pharmacie Mavré', 'Tié-Tié', 'Tié-Tié', 'Avenue de Tié-Tié, face au marché', '+242 06 660 00 06', '08h00 – 22h00', TRUE, -4.788000, 11.870000),
+('Pharmacie Loandjili', 'Loandjili', 'Loandjili', 'Avenue du Littoral, face à l’église Saint-Pierre', '+242 06 660 00 12', '08h00 – 22h00', TRUE, -4.795500, 11.846000),
+('Pharmacie Espace Santé', 'Mongo-Mpoukou', 'Mongo-Mpoukou', 'Avenue de la République, près du marché', '+242 06 660 00 13', '08h00 – 21h30', FALSE, -4.803000, 11.877000),
+('Pharmacie de la Corniche', 'Côte Sauvage', 'Ngoyo', 'Boulevard de la Corniche, proche hôtel', '+242 06 660 00 14', '07h00 – 22h00', TRUE, -4.770000, 11.854000);
 
 -- Produits // médicaments
 INSERT INTO produits (code, nom, categorie) VALUES
@@ -94,7 +97,22 @@ INSERT INTO pharmacie_medicaments (pharmacie_id, produit_id, prix, disponible) V
 (5, 1, 500.00, TRUE),
 (5, 2, 3500.00, TRUE),
 (5, 4, 4500.00, TRUE),
-(5, 11, 600.00, TRUE);
+(5, 11, 600.00, TRUE),
+(6, 1, 500.00, TRUE),
+(6, 2, 3500.00, TRUE),
+(6, 4, 4500.00, TRUE),
+(6, 12, 1000.00, TRUE),
+(6, 8, 1200.00, TRUE),
+(7, 1, 500.00, TRUE),
+(7, 3, 1200.00, TRUE),
+(7, 6, 1800.00, TRUE),
+(7, 11, 600.00, TRUE),
+(7, 5, 1200.00, TRUE),
+(8, 1, 500.00, TRUE),
+(8, 2, 3500.00, TRUE),
+(8, 4, 4500.00, TRUE),
+(8, 9, 4200.00, TRUE),
+(8, 6, 3000.00, TRUE);
 
 -- Utilisateurs de l'application
 INSERT INTO users (email, password_hash, nom, role, pharmacy_id) VALUES

@@ -202,7 +202,7 @@ const pharmacies = [
     id: 10,
     nom: "Pharmacie Mongo-Mpoukou",
     quartier: "Mongo-Mpoukou",
-    arrondissement: "mongo-Mpoukou",
+    arrondissement: "Mongo-Mpoukou",
     adresse: "Carrefour Mongo-Mpoukou, avenue principale",
     telephone: "+242 06 660 00 10",
     horaires: "08h00 – 21h00",
