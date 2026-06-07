@@ -4,10 +4,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   console.log('<i class="fa-solid fa-info-circle"></i> Kilomètre-Santé v2 — démarrage');
 
-  initMap();
   initDetailPanel();
   initCardActions();
   initFavorites();
+
+  const mapToggleBtn = document.getElementById('toggle-map-btn');
+  const mapCloseBtn = document.getElementById('close-map-btn');
+
+  if (mapToggleBtn) {
+    mapToggleBtn.addEventListener('click', toggleMap);
+  }
+
+  if (mapCloseBtn) {
+    mapCloseBtn.addEventListener('click', hideMap);
+  }
 
   renderPharmacies([], true);
 

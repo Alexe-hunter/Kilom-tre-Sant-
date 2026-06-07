@@ -117,9 +117,16 @@
 
   </div>
 
+  <button id="toggle-map-btn" class="map-toggle-btn" type="button" aria-label="Afficher la carte">
+    <i class="fas fa-map-marked-alt" aria-hidden="true"></i>
+  </button>
 
-  <!--map leaflet-->
-  <div id="map" role="region" aria-label="Carte des pharmacies"></div>
+  <div class="map-panel" id="map-panel" aria-hidden="true">
+    <button id="close-map-btn" class="map-close-btn" type="button" aria-label="Fermer la carte">
+      <i class="fas fa-times" aria-hidden="true"></i>
+    </button>
+    <div id="map" role="region" aria-label="Carte des pharmacies"></div>
+  </div>
 
   <!--MAIN-->
   <main class="results-section" id="main" role="main">
@@ -145,7 +152,7 @@
   </main>
 
 
-  <!-- ══ PANNEAU DE DÉTAIL (slide-in) ═════════════════════ -->
+  <!--panneau de detaill -->
 
   <div class="detail-overlay" id="detail-overlay" aria-hidden="true"></div>
 

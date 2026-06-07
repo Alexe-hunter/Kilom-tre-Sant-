@@ -1,15 +1,22 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link rel="icon" href="Assets/img/admin-logo.png" type="image/x-icon">
-    <title>Kilomètre-Santé</title>
+    <link rel="icon" href="Assets/img/admin-logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="Assets/Styles/loading.css">
+    <title>Chargement — Kilomètre-Santé</title>
 </head>
 <body>
     
-    <h2>Chargement...</h2>
+    <div class="loading-container">
+        <div class="logo-spinner">
+            <img src="Assets/img/admin-logo.png" alt="Logo Kilomètre-Santé">
+        </div>
+        <p class="loading-text">Chargement...</p>
+    </div>
 
+    <script type="module" src="Assets/Scripts/loading.js"></script>
     <script type="module" src="./Assets/Scripts/app.js"></script>
-
 </body>
 </html>

@@ -2,6 +2,8 @@
 
 /* Variable globale pour la carte*/
 let map;
+let mapInitialized = false;
+let pendingPharmacies = null;
 // Objet pour stocker les marqueurs de pharmacie, clé = id pharmacie
 let markers = {};
 // Marqueur de la position de l'utilisateur
@@ -11,6 +13,7 @@ let routeLine = null;
 
 
 function initMap() {
+  if (mapInitialized) return;
 
   map = L.map('map', {
     center: [-4.7790, 11.8636],
@@ -24,6 +27,13 @@ function initMap() {
     maxZoom: 19,
     attribution: '<i class="fas fa-copyright"></i> <a href="https://openstreetmap.org">OpenStreetMap</a>'
   }).addTo(map);
+
+  mapInitialized = true;
+
+  if (pendingPharmacies) {
+    updateMapMarkers(pendingPharmacies);
+    pendingPharmacies = null;
+  }
 }
 
 
@@ -31,6 +41,10 @@ function initMap() {
  * @param {Array} pharmacies 
  */
 function updateMapMarkers(pharmacies) {
+  if (!mapInitialized) {
+    pendingPharmacies = pharmacies;
+    return;
+  }
 
   Object.values(markers).forEach(m => map.removeLayer(m));
   markers = {};
@@ -140,12 +154,64 @@ function setupPopupButtons(p) {
  */
 function ouvrirMarqueur(id) {
   const marker = markers[id];
-  if (!marker) return;
+  if (!marker) {
+    if (!mapInitialized) {
+      showMap();
+      setTimeout(() => ouvrirMarqueur(id), 350);
+    }
+    return;
+  }
+
+  if (!mapInitialized) {
+    showMap();
+    setTimeout(() => ouvrirMarqueur(id), 350);
+    return;
+  }
+
+  const mapPanel = document.getElementById('map-panel');
+  if (mapPanel && !mapPanel.classList.contains('active')) {
+    showMap();
+    setTimeout(() => ouvrirMarqueur(id), 350);
+    return;
+  }
 
   map.setView(marker.getLatLng(), 16, { animate: true });
   marker.openPopup();
 
   document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function showMap() {
+  const panel = document.getElementById('map-panel');
+  if (!panel) return;
+  panel.classList.add('active');
+  panel.setAttribute('aria-hidden', 'false');
+
+  if (!mapInitialized) {
+    initMap();
+    return;
+  }
+
+  setTimeout(() => {
+    map.invalidateSize();
+  }, 250);
+}
+
+function hideMap() {
+  const panel = document.getElementById('map-panel');
+  if (!panel) return;
+  panel.classList.remove('active');
+  panel.setAttribute('aria-hidden', 'true');
+}
+
+function toggleMap() {
+  const panel = document.getElementById('map-panel');
+  if (!panel) return;
+  if (panel.classList.contains('active')) {
+    hideMap();
+  } else {
+    showMap();
+  }
 }
 
 
