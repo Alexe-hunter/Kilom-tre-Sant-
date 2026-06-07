@@ -1,6 +1,6 @@
 // api.js - Service d'appel de l'API pour l'espace administration
 
-const API_URL = window.location.hostname === "localhost"
+const API_URL = (window.location.protocol === "file:" || window.location.hostname === "" || window.location.hostname === "localhost")
     ? "http://localhost:3000/api"
     : "https://kilom-tre-sant.onrender.com/api";
 
