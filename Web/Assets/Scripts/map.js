@@ -15,8 +15,21 @@ let routeLine = null;
 function initMap() {
   if (mapInitialized) return;
 
+  // Récupérer la localisation de l'utilisateur s'il l'a autorisée
+  let centerCoords = [-4.7790, 11.8636]; // Centre par défaut (Pointe-Noire)
+  
+  const userLocation = localStorage.getItem('userLocation');
+  if (userLocation) {
+    try {
+      const location = JSON.parse(userLocation);
+      centerCoords = [location.lat, location.lng];
+    } catch (e) {
+      console.warn('Erreur lors du parsing de la localisation:', e);
+    }
+  }
+
   map = L.map('map', {
-    center: [-4.7790, 11.8636],
+    center: centerCoords,
     zoom: 13,
     zoomControl: false 
   });
@@ -50,6 +63,9 @@ function updateMapMarkers(pharmacies) {
   markers = {};
 
   pharmacies.forEach(p => {
+    if (!p.lat || !p.lng || Number.isNaN(parseFloat(p.lat)) || Number.isNaN(parseFloat(p.lng))) {
+      return;
+    }
 
     const iconeCouleur = p.deGarde ? '#00C853' : '#9E9E9E';
     const icone = L.divIcon({

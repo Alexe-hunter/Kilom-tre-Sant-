@@ -68,6 +68,93 @@
                 </button>
             </form>
 
+            <div class="auth-switch">
+                <p>Pas encore de compte ? <button type="button" class="link-button" id="show-register">S'inscrire</button></p>
+            </div>
+
+            <form class="auth-form hidden" id="register-form" novalidate>
+                <div class="form-group">
+                    <label for="register-name" class="form-label">Nom complet</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user input-icon"></i>
+                        <input type="text" id="register-name" class="form-input" placeholder="Nom du pharmacien" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="register-email" class="form-label">Adresse Email</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-envelope input-icon"></i>
+                        <input type="email" id="register-email" class="form-input" placeholder="exemple@pharmacie.cg" required autocomplete="email">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="register-password" class="form-label">Mot de passe</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock input-icon"></i>
+                        <input type="password" id="register-password" class="form-input" placeholder="••••••••" required autocomplete="new-password">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="register-password-confirm" class="form-label">Confirmer le mot de passe</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock input-icon"></i>
+                        <input type="password" id="register-password-confirm" class="form-input" placeholder="••••••••" required autocomplete="new-password">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="register-pharmacy-name" class="form-label">Nom de la pharmacie</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-clinic-medical input-icon"></i>
+                        <input type="text" id="register-pharmacy-name" class="form-input" placeholder="Nom de la pharmacie" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="register-quartier" class="form-label">Quartier</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-map-marker-alt input-icon"></i>
+                        <input type="text" id="register-quartier" class="form-input" placeholder="Quartier" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="register-arrondissement" class="form-label">Arrondissement</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-city input-icon"></i>
+                        <input type="text" id="register-arrondissement" class="form-input" placeholder="Arrondissement" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="register-address" class="form-label">Adresse de la pharmacie</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-road input-icon"></i>
+                        <input type="text" id="register-address" class="form-input" placeholder="Adresse complète" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="register-telephone" class="form-label">Téléphone (optionnel)</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-phone input-icon"></i>
+                        <input type="tel" id="register-telephone" class="form-input" placeholder="+242 06 660 00 00">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="btn-register">
+                    <span class="btn-text">S'inscrire</span>
+                    <i class="fa-solid fa-user-plus btn-icon"></i>
+                    <div class="btn-spinner" id="btn-register-spinner"></div>
+                </button>
+
+                <div class="auth-switch">
+                    <p>Déjà un compte ? <button type="button" class="link-button" id="show-login">Se connecter</button></p>
+                </div>
+            </form>
 
             <div class="auth-card__footer">
                 <a href="/" class="btn-back-home">

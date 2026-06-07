@@ -11,6 +11,93 @@ function hashPassword(password) {
   return crypto.createHash('sha256').update(password).digest('hex');
 }
 
+// POST /api/auth/register
+router.post('/register', async (req, res) => {
+  const {
+    nom,
+    email,
+    password,
+    passwordConfirm,
+    pharmacyName,
+    quartier,
+    arrondissement,
+    adresse,
+    telephone,
+    horaires,
+    lat,
+    lng
+  } = req.body;
+
+  if (!nom || !email || !password || !passwordConfirm || !pharmacyName || !quartier || !arrondissement || !adresse) {
+    return res.status(400).json({ erreur: "Tous les champs obligatoires doivent être remplis." });
+  }
+
+  if (password !== passwordConfirm) {
+    return res.status(400).json({ erreur: "Les mots de passe ne correspondent pas." });
+  }
+
+  try {
+    const existingUser = await db.query('SELECT id FROM users WHERE email = $1', [email.toLowerCase().trim()]);
+    if (existingUser.rows.length > 0) {
+      return res.status(409).json({ erreur: "Cette adresse email est déjà utilisée." });
+    }
+
+    await db.query('BEGIN');
+
+    const pharmaResult = await db.query(
+      `INSERT INTO pharmacies (nom, quartier, arrondissement, adresse, telephone, horaires, de_garde, lat, lng)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+       RETURNING id`,
+      [
+        pharmacyName,
+        quartier,
+        arrondissement,
+        adresse,
+        telephone || '',
+        horaires || '',
+        false,
+        lat !== null && lat !== undefined ? parseFloat(lat) : null,
+        lng !== null && lng !== undefined ? parseFloat(lng) : null
+      ]
+    );
+
+    const pharmacyId = pharmaResult.rows[0].id;
+    const passwordHash = hashPassword(password);
+
+    const userResult = await db.query(
+      `INSERT INTO users (email, password_hash, nom, role, pharmacy_id)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING id, email, nom, role, pharmacy_id`,
+      [email.toLowerCase().trim(), passwordHash, nom, 'pharmacien', pharmacyId]
+    );
+
+    await db.query('COMMIT');
+
+    const user = userResult.rows[0];
+    const tokenPayload = {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      nom: user.nom,
+      pharmacyId: user.pharmacy_id
+    };
+    const token = generateToken(tokenPayload);
+
+    res.status(201).json({
+      message: 'Inscription réussie.',
+      token,
+      role: user.role,
+      nom: user.nom,
+      email: user.email,
+      pharmacyId: user.pharmacy_id
+    });
+  } catch (err) {
+    await db.query('ROLLBACK');
+    console.error('Erreur POST /api/auth/register:', err);
+    res.status(500).json({ erreur: 'Erreur serveur' });
+  }
+});
+
 // POST /api/auth/login
 router.post('/login', async (req, res) => {
   try {
