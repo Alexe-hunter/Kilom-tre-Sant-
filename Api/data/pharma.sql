@@ -15,6 +15,10 @@ CREATE TABLE pharmacies (
     telephone VARCHAR(30),
     horaires VARCHAR(80),
     de_garde BOOLEAN NOT NULL DEFAULT FALSE,
+    approved BOOLEAN NOT NULL DEFAULT FALSE,
+    verification_status VARCHAR(50) NOT NULL DEFAULT 'pending',
+    cert_pharmacien VARCHAR(255),
+    cert_existence VARCHAR(255),
     lat NUMERIC(9,6),
     lng NUMERIC(9,6)
 );
@@ -119,4 +123,17 @@ INSERT INTO users (email, password_hash, nom, role, pharmacy_id) VALUES
 ('admin@kilometresante.cg', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', 'Super Administrateur', 'super-admin', NULL),
 ('poste@kilometresante.cg', '1f3e47121e4fcee83c2c5f2bd014b7cad8dfe0d2b470ff25956054eee7ac5ce1', 'Pharmacien - Poste', 'pharmacien', 1),
 ('centrale@kilometresante.cg', '7f0bbf2d7470da8908d5295f53af32fac87ee2bf4f4fa59755ffeb6b8c5f97a0', 'Pharmacien - Centrale', 'pharmacien', 2);
+
+-- Table des plannings / gardes
+DROP TABLE IF EXISTS schedules CASCADE;
+CREATE TABLE schedules (
+    id SERIAL PRIMARY KEY,
+    titre VARCHAR(255) NOT NULL,
+    type VARCHAR(50) NOT NULL, -- ex: nuit, dimanche, ferie, jour
+    date_debut TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    date_fin TIMESTAMP WITHOUT TIME ZONE,
+    details JSONB,
+    created_by INT REFERENCES users(id),
+    notified BOOLEAN DEFAULT FALSE
+);
 

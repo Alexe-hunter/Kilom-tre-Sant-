@@ -218,3 +218,33 @@ la plupart des commit sont fait en local due au refus
 ## Suite du projet:
 
 Chargement .... Encore en cours de reflexion, la perfection tue donc stay cool mode activé.
+
+---
+
+## Mises à jour récentes 
+
+Voici, en langage simple, les modifications importantes que j'ai ajoutées récemment et qui n'étaient pas encore notées :
+
+- Inscription améliorée pour les pharmaciens : le formulaire d'inscription permet désormais d'envoyer deux certificats (certificat prouvant que la personne est pharmacien, et certificat prouvant l'existence de la pharmacie). Ces fichiers sont uploadés et stockés côté serveur pour vérification manuelle.
+
+- Workflow d'approbation : lorsqu'un pharmacien s'inscrit, sa pharmacie est d'abord **en attente** .le super-admin peut consulter les demandes en attente depuis le tableau de bord, vérifier les certificats et approuver la pharmacie manuellement — après approbation la pharmacie devient visible publiquement.
+
+- Champs et stockage : la table `pharmacies` a été enrichie avec les champs `approved`, `verification_status`, `cert_pharmacien` et `cert_existence` pour gérer l'état d'approbation et garder la trace des fichiers uploadés.
+
+- Uploads et sécurité minima : les certificats sont traités avec `multer` et déposés dans `Api/uploads/`. Le serveur sert ces fichiers statiques sous `/uploads`. (À améliorer plus tard : validations MIME / tailles, stockage sécurisé, nettoyage automatique.)
+
+- API et routes :
+  - `POST /api/auth/register` accepte maintenant les fichiers (multipart/form-data) et crée la pharmacie + l'utilisateur pharmacien associé en base.
+  - `GET /api/pharmacies/pending` (admin) liste les demandes en attente.
+  - `PUT /api/pharmacies/:id/approve` permet à l'admin d'approuver une pharmacie.
+  - `POST /api/schedules` et `GET /api/schedules` forment une API simple pour gérer les plannings (création / listing) — le backend a une table `schedules` pour stocker ces plannings.
+
+- Frontend (UI) :
+  - La page de connexion (`/Client/auth.html`) propose maintenant un formulaire d'inscription complet (avec upload de certificats) et un bouton `Utiliser ma localisation actuelle` pour pré-remplir la latitude/longitude de la pharmacie.
+  - Le dashboard super-admin (`/Client/super-admin/Admin.html`) contient un onglet Demandes pour voir les inscriptions en attente (avec liens vers les certificats) et un bouton Plannings pour créer rapidement un planning.
+  - Le fichier `Web/Client/Assets/Scripts/api.js` a été enrichi avec des fonctions pour appeler ces nouveaux endpoints.
+
+- Carte & expérience :
+  - La carte demande maintenant la géolocalisation et peut centrer l'affichage sur la position de l'utilisateur.
+  - Par défaut, le site public n'affiche que les pharmacies `approved = TRUE`.
+  - Le frontend a aussi reçu une page de chargement améliorée (logo + styles) qui s'affiche pendant l'initialisation.

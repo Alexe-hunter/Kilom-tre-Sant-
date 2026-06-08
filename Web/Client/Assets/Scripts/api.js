@@ -126,3 +126,56 @@ export {
     apiDeletePharmacy,
     apiUpdateCatalogue
 };
+// Admin specific API calls
+async function apiFetchPendingPharmacies() {
+    try {
+        const response = await fetch(`${API_URL}/pharmacies/pending`, { headers: getHeaders() });
+        if (!response.ok) throw new Error('Erreur lors de la récupération des demandes');
+        return await response.json();
+    } catch (err) {
+        console.error(err);
+        return { pharmacies: [], total: 0 };
+    }
+}
+
+async function apiApprovePharmacy(id) {
+    try {
+        const response = await fetch(`${API_URL}/pharmacies/${id}/approve`, { method: 'PUT', headers: getHeaders() });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.erreur || 'Erreur lors de l\'approbation');
+        return data;
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+}
+
+async function apiCreateSchedule(payload) {
+    try {
+        const response = await fetch(`${API_URL}/schedules`, { method: 'POST', headers: getHeaders(), body: JSON.stringify(payload) });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.erreur || 'Erreur lors de la création du planning');
+        return data;
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+}
+
+async function apiFetchSchedules() {
+    try {
+        const response = await fetch(`${API_URL}/schedules`, { headers: getHeaders() });
+        if (!response.ok) throw new Error('Erreur lors de la récupération des plannings');
+        return await response.json();
+    } catch (err) {
+        console.error(err);
+        return { schedules: [], total: 0 };
+    }
+}
+
+export {
+    apiFetchPendingPharmacies,
+    apiApprovePharmacy,
+    apiCreateSchedule,
+    apiFetchSchedules
+};

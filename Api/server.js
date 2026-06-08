@@ -23,8 +23,12 @@ app.use((req, res, next) => {
 // mes routes (endpoints) sont définies dans des fichiers séparés
 const pharmaciesRouter = require('./routes/pharmacies');
 const authRouter = require('./routes/auth');
+const schedulesRouter = require('./routes/schedules');
 app.use('/api/pharmacies', pharmaciesRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/schedules', schedulesRouter);
+const path = require('path');
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 // les routes racines ou d'autres routes spécifiques peuvent être définies ici

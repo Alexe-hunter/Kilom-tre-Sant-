@@ -1,6 +1,9 @@
 // Routes d'authentification pour notre API
 const express = require('express');
 const crypto = require('crypto');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 const db = require('../db');
 const { generateToken } = require('../middleware/auth');
 
@@ -12,7 +15,24 @@ function hashPassword(password) {
 }
 
 // POST /api/auth/register
-router.post('/register', async (req, res) => {
+// configure multer storage
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const uploadDir = path.join(__dirname, '..', 'uploads');
+    if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    const name = path.basename(file.originalname, ext).replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    cb(null, `${Date.now()}_${name}${ext}`);
+  }
+});
+
+const upload = multer({ storage });
+
+router.post('/register', upload.fields([{ name: 'cert_pharmacien' }, { name: 'cert_existence' }]), async (req, res) => {
+  // files will be available in req.files
   const {
     nom,
     email,
@@ -63,6 +83,20 @@ router.post('/register', async (req, res) => {
 
     const pharmacyId = pharmaResult.rows[0].id;
     const passwordHash = hashPassword(password);
+
+    // save file paths if uploaded
+    let certPharmacienPath = null;
+    let certExistencePath = null;
+    if (req.files) {
+      if (req.files.cert_pharmacien && req.files.cert_pharmacien[0]) {
+        certPharmacienPath = path.join('uploads', req.files.cert_pharmacien[0].filename);
+        await db.query('UPDATE pharmacies SET cert_pharmacien = $1 WHERE id = $2', [certPharmacienPath, pharmacyId]);
+      }
+      if (req.files.cert_existence && req.files.cert_existence[0]) {
+        certExistencePath = path.join('uploads', req.files.cert_existence[0].filename);
+        await db.query('UPDATE pharmacies SET cert_existence = $1 WHERE id = $2', [certExistencePath, pharmacyId]);
+      }
+    }
 
     const userResult = await db.query(
       `INSERT INTO users (email, password_hash, nom, role, pharmacy_id)

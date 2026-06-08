@@ -102,6 +102,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const showRegisterBtn = document.getElementById("show-register");
     const showLoginBtn = document.getElementById("show-login");
     const btnRegister = document.getElementById("btn-register");
+    const useLocationBtn = document.getElementById('use-location-btn');
+    const locationFeedback = document.getElementById('location-feedback');
+    const registerLat = document.getElementById('register-lat');
+    const registerLng = document.getElementById('register-lng');
 
     if (showRegisterBtn) {
         showRegisterBtn.addEventListener("click", () => {
@@ -112,6 +116,20 @@ document.addEventListener("DOMContentLoaded", () => {
     if (showLoginBtn) {
         showLoginBtn.addEventListener("click", () => {
             toggleForm(false);
+        });
+    }
+
+    if (useLocationBtn) {
+        useLocationBtn.addEventListener('click', async () => {
+            locationFeedback.textContent = 'Recherche de votre position...';
+            const pos = await getCurrentPosition();
+            if (pos) {
+                registerLat.value = pos.lat;
+                registerLng.value = pos.lng;
+                locationFeedback.textContent = 'Localisation enregistrée.';
+            } else {
+                locationFeedback.textContent = 'Impossible de récupérer la position.';
+            }
         });
     }
 
@@ -143,27 +161,41 @@ document.addEventListener("DOMContentLoaded", () => {
             setLoading(true, btnRegister);
 
             try {
-                const userLocation = await getCurrentPosition();
+                // prefer explicit chosen location if available
+                let userLocation = null;
+                if (registerLat && registerLng && registerLat.value && registerLng.value) {
+                    userLocation = { lat: parseFloat(registerLat.value), lng: parseFloat(registerLng.value) };
+                } else {
+                    userLocation = await getCurrentPosition();
+                }
 
-                const payload = {
-                    nom,
-                    email,
-                    password,
-                    pharmacyName,
-                    quartier,
-                    arrondissement,
-                    adresse,
-                    telephone,
-                    lat: userLocation?.lat || null,
-                    lng: userLocation?.lng || null
-                };
+                // build FormData to include files
+                const formData = new FormData();
+                formData.append('nom', nom);
+                formData.append('email', email);
+                formData.append('password', password);
+                formData.append('passwordConfirm', passwordConfirm);
+                formData.append('pharmacyName', pharmacyName);
+                formData.append('quartier', quartier);
+                formData.append('arrondissement', arrondissement);
+                formData.append('adresse', adresse);
+                formData.append('telephone', telephone);
+                if (userLocation) {
+                    formData.append('lat', userLocation.lat);
+                    formData.append('lng', userLocation.lng);
+                }
+                const certPharmacienEl = document.getElementById('cert-pharmacien');
+                const certExistenceEl = document.getElementById('cert-existence');
+                if (certPharmacienEl && certPharmacienEl.files && certPharmacienEl.files[0]) {
+                    formData.append('cert_pharmacien', certPharmacienEl.files[0]);
+                }
+                if (certExistenceEl && certExistenceEl.files && certExistenceEl.files[0]) {
+                    formData.append('cert_existence', certExistenceEl.files[0]);
+                }
 
                 const response = await fetch(`${API_URL}/auth/register`, {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(payload)
+                    body: formData
                 });
 
                 const data = await response.json();

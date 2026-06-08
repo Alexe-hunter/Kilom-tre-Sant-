@@ -4,7 +4,10 @@ import {
     apiFetchPharmacies,
     apiCreatePharmacy,
     apiUpdatePharmacy,
-    apiDeletePharmacy
+    apiDeletePharmacy,
+    apiFetchPendingPharmacies,
+    apiApprovePharmacy,
+    apiCreateSchedule
 } from "./api.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -33,6 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const btnLogout = document.getElementById("btn-logout");
     const btnAddPharmacy = document.getElementById("btn-add-pharmacy");
+    const btnSchedules = document.getElementById('btn-schedules');
+    const sidebarLinks = document.querySelectorAll('.sidebar__link[data-tab]');
     const btnClosePanel = document.getElementById("btn-close-panel");
     const slideOverlay = document.getElementById("slide-overlay");
     const slidePanel = document.getElementById("slide-panel");
@@ -55,6 +60,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // pour la recup des données et le rendu initial du tableau
     loadDashboardData();
+
+    // handle sidebar tab clicks
+    sidebarLinks.forEach(link => link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const tab = link.dataset.tab;
+        document.querySelectorAll('.sidebar__link').forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        if (tab === 'pharmacies') {
+            document.getElementById('panel-title').textContent = 'Liste des pharmacies';
+            loadDashboardData();
+        } else if (tab === 'pending') {
+            document.getElementById('panel-title').textContent = 'Demandes en attente';
+            loadPending();
+        }
+    }));
+
+    if (btnSchedules) {
+        btnSchedules.addEventListener('click', async () => {
+            const titre = prompt('Titre du planning (ex: Garde Nuit 2026-06-10)');
+            if (!titre) return;
+            const type = prompt('Type (nuit / dimanche / ferie / jour)');
+            if (!type) return;
+            const dateDebut = prompt('Date de début (YYYY-MM-DD HH:MM)');
+            if (!dateDebut) return;
+            const dateFin = prompt('Date de fin (YYYY-MM-DD HH:MM) - laisser vide si non');
+
+            try {
+                await apiCreateSchedule({ titre, type, date_debut: dateDebut, date_fin: dateFin || null, details: null });
+                showToast('Planning créé et envoyé.', 'success');
+            } catch (err) {
+                showToast('Erreur création planning', 'error');
+            }
+        });
+    }
 
     async function loadDashboardData() {
         showLoadingTable();
@@ -109,6 +148,60 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         attachActionListeners();
+    }
+
+    // Charger et afficher les demandes en attente
+    async function loadPending() {
+        showLoadingTable();
+        try {
+            const data = await apiFetchPendingPharmacies();
+            const pending = data.pharmacies || [];
+            if (!tableBody) return;
+            tableBody.innerHTML = '';
+            if (pending.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="6" class="table-loading">Aucune demande en attente.</td></tr>`;
+                return;
+            }
+
+            pending.forEach(p => {
+                const tr = document.createElement('tr');
+                const cert1 = p.cert_pharmacien ? `<a href="/uploads/${p.cert_pharmacien.split('/').pop()}" target="_blank">Voir</a>` : '—';
+                const cert2 = p.cert_existence ? `<a href="/uploads/${p.cert_existence.split('/').pop()}" target="_blank">Voir</a>` : '—';
+
+                tr.innerHTML = `
+                    <td><strong>${escapeHtml(p.nom)}</strong></td>
+                    <td>${escapeHtml(p.quartier)} / ${escapeHtml(p.arrondissement)}</td>
+                    <td>${escapeHtml(p.telephone || '—')}</td>
+                    <td>${escapeHtml(p.horaires || '—')}</td>
+                    <td>${escapeHtml(p.verification_status || 'pending')}</td>
+                    <td class="actions-cell">
+                        <div style="display:flex;gap:8px;align-items:center;">
+                            <div>Certifs: ${cert1} | ${cert2}</div>
+                            <button class="btn-action-icon btn-action-icon--approve" data-id="${p.id}" title="Approuver"><i class="fas fa-check"></i></button>
+                        </div>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+
+            // attach approve listeners
+            document.querySelectorAll('.btn-action-icon--approve').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const id = parseInt(btn.dataset.id, 10);
+                    if (!confirm('Approuver cette pharmacie et la rendre publique ?')) return;
+                    try {
+                        await apiApprovePharmacy(id);
+                        showToast('Pharmacie approuvée.', 'success');
+                        loadPending();
+                    } catch (err) {
+                        showToast('Erreur lors de l\'approbation', 'error');
+                    }
+                });
+            });
+        } catch (err) {
+            console.error(err);
+            tableBody.innerHTML = `<tr><td colspan="6" class="table-loading">Erreur lors du chargement.</td></tr>`;
+        }
     }
 
     function showLoadingTable() {

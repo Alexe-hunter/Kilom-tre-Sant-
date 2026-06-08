@@ -10,7 +10,8 @@ const router = express.Router();
 // retourne la liste des pharmacies, avec des filtres optionnels
 router.get('/', async (req, res) => {
   try {
-    let query = 'SELECT id, nom, quartier, arrondissement, adresse, telephone, horaires, de_garde AS "deGarde", lat, lng FROM pharmacies WHERE 1=1';
+    // Par défaut, n'affiche que les pharmacies approuvées
+    let query = 'SELECT id, nom, quartier, arrondissement, adresse, telephone, horaires, de_garde AS "deGarde", lat, lng FROM pharmacies WHERE approved = TRUE';
     const params = [];
 
     if (req.query.garde === 'true') {
@@ -190,6 +191,43 @@ router.get('/medicament/recherche', async (req, res) => {
     });
   } catch (err) {
     console.error('Erreur GET /api/pharmacies/medicament/recherche:', err);
+    res.status(500).json({ erreur: 'Erreur serveur' });
+  }
+});
+
+// route admin : GET /api/pharmacies/pending - liste des pharmacies en attente d'approbation
+router.get('/pending', authMiddleware, async (req, res) => {
+  try {
+    if (req.user.role !== 'super-admin') {
+      return res.status(403).json({ erreur: 'Accès refusé' });
+    }
+
+    const result = await db.query('SELECT id, nom, quartier, arrondissement, adresse, telephone, horaires, de_garde AS "deGarde", lat, lng, verification_status, cert_pharmacien, cert_existence FROM pharmacies WHERE approved = FALSE ORDER BY id');
+    res.json({ total: result.rows.length, pharmacies: result.rows });
+  } catch (err) {
+    console.error('Erreur GET /api/pharmacies/pending:', err);
+    res.status(500).json({ erreur: 'Erreur serveur' });
+  }
+});
+
+// route admin : PUT /api/pharmacies/:id/approve - approuver une pharmacie
+router.put('/:id/approve', authMiddleware, async (req, res) => {
+  try {
+    if (req.user.role !== 'super-admin') {
+      return res.status(403).json({ erreur: 'Accès refusé' });
+    }
+    const id = parseInt(req.params.id, 10);
+
+    const pharmaRes = await db.query('SELECT id FROM pharmacies WHERE id = $1', [id]);
+    if (pharmaRes.rows.length === 0) {
+      return res.status(404).json({ erreur: 'Pharmacie introuvable' });
+    }
+
+    await db.query('UPDATE pharmacies SET approved = TRUE, verification_status = $1 WHERE id = $2', ['approved', id]);
+
+    res.json({ message: 'Pharmacie approuvée.' });
+  } catch (err) {
+    console.error('Erreur PUT /api/pharmacies/:id/approve', err);
     res.status(500).json({ erreur: 'Erreur serveur' });
   }
 });

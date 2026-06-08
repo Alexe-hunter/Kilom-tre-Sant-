@@ -145,6 +145,32 @@
                     </div>
                 </div>
 
+                <div class="form-group location-group">
+                    <label class="form-label">Localisation</label>
+                    <div class="input-wrapper">
+                        <button type="button" class="btn-secondary" id="use-location-btn">Utiliser ma localisation</button>
+                        <span id="location-feedback" class="location-feedback"></span>
+                        <input type="hidden" id="register-lat" name="lat">
+                        <input type="hidden" id="register-lng" name="lng">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="cert-pharmacien" class="form-label">Certificat du pharmacien (PDF / image)</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-file-medical input-icon"></i>
+                        <input type="file" id="cert-pharmacien" name="cert_pharmacien" accept=".pdf,image/*" class="form-input">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="cert-existence" class="form-label">Preuve d'existence de la pharmacie (PDF / image)</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-file-input input-icon"></i>
+                        <input type="file" id="cert-existence" name="cert_existence" accept=".pdf,image/*" class="form-input">
+                    </div>
+                </div>
+
                 <button type="submit" class="btn-submit" id="btn-register">
                     <span class="btn-text">S'inscrire</span>
                     <i class="fa-solid fa-user-plus btn-icon"></i>
