@@ -7,7 +7,7 @@ const pool = new Pool({
   port: parseInt(process.env.PGPORT) || 5432,
   user: process.env.PGUSER || 'postgres',
   password: process.env.PGPASSWORD,
-  database: process.env.PGDATABASE || 'kilometresante',
+  database: process.env.PGDATABASE || 'Kilometre-Santé',
 });
 
 //fonction helper pour exécuter mes requêtes

@@ -10,9 +10,17 @@ const router = express.Router();
 // retourne la liste des pharmacies, avec des filtres optionnels
 router.get('/', async (req, res) => {
   try {
-    // Par défaut, n'affiche que les pharmacies approuvées
-    let query = 'SELECT id, nom, quartier, arrondissement, adresse, telephone, horaires, de_garde AS "deGarde", lat, lng FROM pharmacies WHERE approved = TRUE';
+    // les pharmacies approuvés par defaut s'afficheront 
+    let query = 'SELECT id, nom, quartier, arrondissement, adresse, telephone, horaires, de_garde AS "deGarde", lat, lng, approved FROM pharmacies WHERE 1=1';
     const params = [];
+
+    if (req.query.approved === 'true') {
+      query += ' AND approved = TRUE';
+    } else if (req.query.approved === 'false') {
+      query += ' AND approved = FALSE';
+    } else if (req.query.approved !== 'all') {
+      query += ' AND approved = TRUE';
+    }
 
     if (req.query.garde === 'true') {
       query += ' AND de_garde = TRUE';
