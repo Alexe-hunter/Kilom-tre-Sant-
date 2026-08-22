@@ -1,6 +1,7 @@
-//Connexion à la base de données PostgreSQL
+// Connexion PostgreSQL avec fallback local JS
 require('dotenv').config();
 const { Pool } = require('pg');
+const localDb = require('./data/localDb');
 
 const pool = new Pool({
   host: process.env.PGHOST || 'localhost',
@@ -10,17 +11,31 @@ const pool = new Pool({
   database: process.env.PGDATABASE || 'Kilometre-Santé',
 });
 
-//fonction helper pour exécuter mes requêtes
-const query = (text, params) => {
-  return pool.query(text, params);
-};
+let useLocalDb = false;
 
-//test de connexion au démarrage
+async function query(text, params = []) {
+  if (useLocalDb) {
+    return localDb.query(text, params);
+  }
+
+  try {
+    return await pool.query(text, params);
+  } catch (err) {
+    console.warn('PostgreSQL indisponible, bascule sur la base locale JavaScript.');
+    console.warn(err.message);
+    useLocalDb = true;
+    return localDb.query(text, params);
+  }
+}
+
 pool.on('error', (err) => {
-  console.error('Erreur de pool PostgreSQL:', err);
+  console.warn('Erreur du pool PostgreSQL, activation du mode local JS.');
+  console.warn(err.message);
+  useLocalDb = true;
 });
 
 module.exports = {
   query,
   pool,
+  useLocalDb: () => useLocalDb,
 };

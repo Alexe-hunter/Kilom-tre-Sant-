@@ -1,8 +1,6 @@
 // auth.js - Gestionnaire de la page de connexion Espace Pro
 
-const API_URL = (window.location.protocol === "file:" || window.location.hostname === "" || window.location.hostname === "localhost")
-    ? "http://localhost:3000/api"
-    : "https://kilom-tre-sant.onrender.com/api";
+const API_URL = "http://localhost:3000/api";
 
 document.addEventListener("DOMContentLoaded", () => {
     const loginForm = document.getElementById("login-form");

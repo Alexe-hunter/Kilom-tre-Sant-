@@ -1,8 +1,6 @@
-// api.js - Service d'appel de l'API pour l'espace administration
+// api.js - Service d'appel de l'API locale du projet
 
-const API_URL = (window.location.protocol === "file:" || window.location.hostname === "" || window.location.hostname === "localhost")
-    ? "http://localhost:3000/api"
-    : "https://kilom-tre-sant.onrender.com/api";
+const API_URL = "http://localhost:3000/api";
 
 // Helper pour obtenir les en-têtes avec authentification Bearer
 function getHeaders() {

@@ -1,9 +1,5 @@
-// mon API_URL doit correspondre à l'adresse de mon serveur backend
-const localHosts = ['', 'localhost', '127.0.0.1'];
-const API_URL =
-  (window.location.protocol === 'file:' || localHosts.includes(window.location.hostname))
-    ? 'http://localhost:3000/api'
-    : 'https://kilom-tre-sant.onrender.com/api';
+// point d'entrée backend local de l'application
+const API_URL = 'http://localhost:3000/api';
 
 
 
