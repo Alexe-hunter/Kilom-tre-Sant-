@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="Assets/Styles/main.css">
     <link rel="stylesheet" href="Assets/Styles/auth.css">
-    <title>Connexion — Kilomètre-Santé</title>
+    <title>Connexion — Bic-Care</title>
+    <!-- Optionally set API base for separate hosting -->
+    <!-- <meta name="api-base" content="https://api.example.com/api"> -->
 </head>
 
 <body class="auth-body">
@@ -25,9 +27,9 @@
         <div class="auth-card">
             <div class="auth-card__header">
                 <div class="auth-logo">
-                    <img src="Assets/img/admin-logo.png" alt="Logo Kilomètre-Santé">
+                    <img src="Assets/img/admin-logo.png" alt="Logo Bic-Care">
                 </div>
-                <h1 class="auth-title">Kilomètre<span>-Santé</span></h1>
+                <h1 class="auth-title">Bic-Care</h1>
                 <p class="auth-subtitle">Espace Professionnel & Administration</p>
             </div>
 
@@ -43,7 +45,7 @@
                     <label for="email" class="form-label">Adresse Email</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-envelope input-icon"></i>
-                        <input type="email" id="email" class="form-input" placeholder="exemple@kilometresante.cg"
+                        <input type="email" id="email" class="form-input" placeholder="exemple@biccare.cg"
                             required autocomplete="email">
                     </div>
                 </div>
@@ -192,6 +194,12 @@
     </main>
 
     <script type="module" src="Assets/Scripts/auth.js"></script>
+        <script>
+            (function(){
+                const meta = document.querySelector('meta[name="api-base"]');
+                if (meta && meta.content) window.__API_BASE__ = meta.content.replace(/\/+$/, '');
+            })();
+        </script>
 </body>
 
 </html>

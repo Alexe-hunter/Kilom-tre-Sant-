@@ -7,16 +7,25 @@
     <link rel="stylesheet" href="../Assets/Styles/main.css">
     <link rel="stylesheet" href="../Assets/Styles/dashAdmin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <title>Administration — Kilomètre-Santé</title>
+    <title>Administration — Bic-Care</title>
+        <!-- Optionally set API base for separate hosting -->
+        <!-- <meta name="api-base" content="https://api.example.com/api"> -->
 </head>
 
 <body>
+
+        <script>
+            (function(){
+                const meta = document.querySelector('meta[name="api-base"]');
+                if (meta && meta.content) window.__API_BASE__ = meta.content.replace(/\/+$/, '');
+            })();
+        </script>
 
     <!--sidebarr-->
     <aside class="sidebar">
 
         <div class="sidebar__header">
-            <h2 class="sidebar__title">Kilomètre<span>-Santé</span></h2>
+            <h2 class="sidebar__title">Bic-Care</h2>
             <p class="sidebar__role-tag">Super-Admin</p>
         </div>
 
@@ -54,7 +63,7 @@
             </video>
             <div class="hero-video__overlay"></div>
             <div class="hero-video__content">
-                <h1 class="hero-video__title">Kilomètre<span>-Santé</span></h1>
+                <h1 class="hero-video__title">Bic-Care</h1>
                 <p class="hero-video__subtitle">Dashboard Super-Admin</p>
             </div>
         </section>

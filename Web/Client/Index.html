@@ -5,18 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="Assets/img/admin-logo.png" type="image/x-icon">
     <link rel="stylesheet" href="Assets/Styles/loading.css">
-    <title>Chargement — Kilomètre-Santé</title>
+    <title>Chargement — Bic-Care</title>
+    <!-- Optionally set API base for separate hosting: -->
+    <!-- <meta name="api-base" content="https://api.example.com/api"> -->
 </head>
 <body>
     
     <div class="loading-container">
         <div class="logo-spinner">
-            <img src="Assets/img/admin-logo.png" alt="Logo Kilomètre-Santé">
+            <img src="Assets/img/admin-logo.png" alt="Logo Bic-Care">
         </div>
         <p class="loading-text">Chargement...</p>
     </div>
 
     <script type="module" src="Assets/Scripts/loading.js"></script>
+        <script>
+            (function(){
+                const meta = document.querySelector('meta[name="api-base"]');
+                if (meta && meta.content) window.__API_BASE__ = meta.content.replace(/\/+$/, '');
+            })();
+        </script>
     <script type="module" src="./Assets/Scripts/app.js"></script>
 </body>
 </html>

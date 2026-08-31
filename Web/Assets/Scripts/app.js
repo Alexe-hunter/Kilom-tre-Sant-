@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', async () => {
 
-  console.log('<i class="fa-solid fa-info-circle"></i> Kilomètre-Santé v2 — démarrage');
+  console.log('<i class="fa-solid fa-info-circle"></i> Bic-Care v2 — démarrage');
 
   initDetailPanel();
   initCardActions();

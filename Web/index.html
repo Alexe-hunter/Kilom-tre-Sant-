@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="Assets/img/assest-logo/logo-color-green.png" type="image/x-icon">
-  <title>Kilomètre-Santé</title>
+  <title>Bic-Care</title>
 
   <link rel="stylesheet" href="Assets/Styles/variables.css">
   <link rel="stylesheet" href="Assets/Styles/reset.css">
@@ -13,6 +13,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <!--map css-->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <!-- Optionally set the API base via meta (e.g. https://api.mydomain.com/api) -->
+  <!-- <meta name="api-base" content="https://api.example.com/api"> -->
 </head>
 
 <body>
@@ -23,9 +25,9 @@
     <div class="header__inner">
 
       <div class="header__logo">
-        <img src="Assets/img/assest-logo/logo-color-white.png" alt="Logo de Kilomètre-Santé">
+        <img src="Assets/img/assest-logo/logo-color-white.png" alt="Logo de Bic-Care">
         <h1 class="header__title">
-          Kilomètre<span>-Santé</span>
+          Bic-Care
         </h1>
       </div>
 
@@ -44,7 +46,7 @@
     </video>
     <div class="hero-video__overlay"></div>
     <div class="hero-video__content">
-      <h1 class="hero-video__title">Kilomètre<span>-Santé</span></h1>
+      <h1 class="hero-video__title">Bic-Care</h1>
       <p class="hero-video__subtitle">Trouvez les pharmacies de garde à Pointe-Noire</p>
       
       <!-- Indicateurs beaucoup mieux visible sur hero, plus de style je trouve, nice-->
@@ -181,6 +183,19 @@
   <div class="toast-container" id="toast-container" aria-live="polite"></div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Allow hosting environment to set API base URL by defining a meta tag
+    // or by injecting `window.__API_BASE__` before loading `api.js`.
+    // If you deploy front and back separately, set the meta on the served HTML:
+    // <meta name="api-base" content="https://api.yourdomain.com/api">
+    (function () {
+      const meta = document.querySelector('meta[name="api-base"]');
+      if (meta && meta.content) {
+        window.__API_BASE__ = meta.content.replace(/\/+$/, '');
+      }
+    })();
+  </script>
+  <script src="Assets/Scripts/localData.js"></script>
   <script src="Assets/Scripts/api.js"></script>
   <script src="Assets/Scripts/render.js"></script>
   <script src="Assets/Scripts/map.js"></script>
